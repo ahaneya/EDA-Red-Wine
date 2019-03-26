@@ -51,8 +51,67 @@ sum(is.na(red))
 ```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
 ggplot(data = red, aes(x = quality)) +
   geom_histogram() +
-  ggtitle('Histogram of wine qualities distrubition',)
+  ggtitle('Histogram of wine qualities distrubition')
 ```
+** Most of the wine samples are centered on 5, 6, 7 the extreme low and extreme <br> low can be considered as outliers **
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
+ggplot(data = red, aes(x = density)) +
+  geom_histogram() +
+  ggtitle('Histogram of wine densities distrubition')
+```
+** Density of the wine is normally distributed **
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
+ggplot(data = red, aes(x = fixed.acidity)) +
+  geom_histogram() +
+  ggtitle('Histogram of wine fixed acidity distrubition')
+```
+
+** Most of the fixed acidity data is between 6 and 10 and the plot is right <br> skewed**
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
+ggplot(data = red, aes(x = volatile.acidity)) +
+  geom_histogram() +
+  ggtitle('Histogram of wine Volatile Acidity distrubition')
+```
+
+** Data points are between 0.2 and 0.8 and the plot is right skewed **
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
+ggplot(data = red, aes(x = citric.acid)) +
+  geom_histogram() +
+  ggtitle('Histogram of wine Citric Acid distrubition')
+```
+
+** Citric acid at 0.0 has the highest count next to it 0.50 **
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
+ggplot(data = red, aes(x = residual.sugar)) +
+  geom_histogram() +
+  ggtitle('Histogram of wine Residual Sugar distrubition')
+```
+
+** Right skewed plot with most of the data points at 2 **
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
+ggplot(data = red, aes(x = chlorides)) +
+  geom_histogram() +
+  ggtitle('Histogram of wine Chlorides distrubition')
+```
+
+** Right skewed plot with most of the points arounf 0.1 **
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
+ggplot(data = red, aes(x = free.sulfur.dioxide)) +
+  geom_histogram() +
+  ggtitle('Histogram of wine Free Sulfur Dioxide distrubition')
+```
+ ** Right skewed plot with lower values having more count **
+ 
+```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
+ggplot(data = red, aes(x = total.sulfur.dioxide)) +
+  geom_histogram() +
+  ggtitle('Histogram of wine Total Sulfur Dioxide distrubition')
+``` 
 
 
 # Univariate Analysis
