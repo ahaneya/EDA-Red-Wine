@@ -256,16 +256,156 @@ yourself to relationships between a main output feature and one of the
 supporting variables. Try to look at relationships between supporting variables
 as well.
 
-```{r echo=FALSE, Bivariate_Plots}
-ggplot(data = red, aes(y = residual.sugar, x = alcohol)) +
-  geom_point() +
-  facet_wrap(~quality, scales = 'free')
+```{r echo=FALSE, message=FALSE, warning=FALSE, residual.sugra_alcohol}
+ggplot(data = red, aes(x = residual.sugar, y= alcohol)) +
+  geom_point(alpha = 1/2) +
+  scale_x_continuous(breaks = seq(0,quantile(red$residual.sugar,0.99)))+
+  scale_y_continuous(breaks = seq(0,quantile(red$alcohol,0.99))) +
+  coord_cartesian(xlim = c(min(red$residual.sugar),
+                           quantile(red$residual.sugar,0.99)),
+                  ylim = c(min(red$alcohol),
+                           quantile(red$alcohol,0.99)))
 ```
 
-# Bivariate Analysis
+**There is no significant releation between the residual.sugra and alcohol**
 
-> **Tip**: As before, summarize what you found in your bivariate explorations
-here. Use the questions below to guide your discussion.
+```{r echo=FALSE, message=FALSE, warning=FALSE, density_alcohol}
+ggplot(data = red, aes(x = density, y= alcohol)) +
+  geom_point(aes(color = 'orange'), alpha = 1/4, position = 'jitter') +
+  scale_x_continuous(breaks = seq(0,max(red$density),.01))+
+  scale_y_continuous(breaks = seq(0,max(red$alcohol),.5)) +
+  coord_cartesian(xlim = c(min(red$density),
+                           quantile(red$density,0.99)),
+                  ylim = c(min(red$alcohol),
+                           quantile(red$alcohol,0.99)))
+```
+
+**There is a -ve kind of strong corelationbetween alcohol and density
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, quality_volatile.acidity}
+ggplot(data = red, aes(y = volatile.acidity, x= as.integer(as.vector(quality)))) +
+  geom_point(alpha = .3) +
+  scale_y_continuous(breaks = seq(0,quantile(red$volatile.acidity,0.99),.1))+
+  scale_x_continuous(breaks = seq(3,quantile(with(red,as.integer(as.vector(quality))),0.99))) +
+  coord_cartesian(ylim = c(min(red$volatile.acidity),
+                           quantile(red$volatile.acidity,0.99)),
+                  xlim = c(3,
+                           quantile(with(red,as.integer(as.vector(quality))),0.99))) +
+  xlab('Quality')
+
+View(with(red,as.integer(as.vector(quality))))
+```
+
+**It seems with decrese of the volatile.acidity the quality increases on average**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, residual.sugar_quality}
+ggplot(data = red, aes(y = chlorides, x= as.integer(as.vector(quality)))) +
+  geom_point(alpha = .3) +
+  scale_y_continuous(breaks = seq(0,quantile(red$chlorides,0.99),.1))+
+  scale_x_continuous(breaks = seq(3,
+                              quantile(with(red,as.integer(as.vector(quality)))
+                                           ,0.99))) +
+  coord_cartesian(ylim = c(min(red$chlorides),
+                           quantile(red$chlorides,0.99)),
+                  xlim = c(3,
+                           quantile(with(red,as.integer(as.vector(quality)))
+                                    ,0.99))) +
+  xlab('Quality')
+```
+
+**Quality at its best when the chlorides is between 0.05 and  0.1**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, total.sulfur.dioxide_quality}
+ggplot(data = red, aes(y = total.sulfur.dioxide, x= as.integer(as.vector(quality)))) +
+  geom_point(alpha = .5) +
+  scale_y_continuous(breaks = seq(0,quantile(red$total.sulfur.dioxide,0.99),5))+
+  scale_x_continuous(breaks = seq(3,
+                              quantile(with(red,as.integer(as.vector(quality)))
+                                           ,0.99))) +
+  coord_cartesian(ylim = c(min(red$total.sulfur.dioxide),
+                           quantile(red$total.sulfur.dioxide,0.99)),
+                  xlim = c(3,
+                           quantile(with(red,as.integer(as.vector(quality)))
+                                    ,0.99))) +
+  xlab('Quality')
+```
+
+**lower Total sulfur dioxide (TSD) is a contributor to better quality, however \ 
+I see a lower TSD with a lower  quality rating, this could be related to \ 
+coorelated variable another point to be considered is that there is not enough \
+samples with quality level 8 **
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, free.sulfur.dioxide_quality}
+ggplot(data = red, aes(y = free.sulfur.dioxide, x= as.integer(as.vector(quality)))) +
+  geom_point(alpha = .3) +
+  scale_y_continuous(breaks = seq(0,quantile(red$free.sulfur.dioxide,0.99),5))+
+  scale_x_continuous(breaks = seq(3,
+                              quantile(with(red,as.integer(as.vector(quality)))
+                                           ,0.99))) +
+  coord_cartesian(ylim = c(min(red$free.sulfur.dioxide),
+                           quantile(red$free.sulfur.dioxide,0.99)),
+                  xlim = c(3,
+                           quantile(with(red,as.integer(as.vector(quality)))
+                                    ,0.99))) +
+  xlab('Quality')
+```
+
+**From the first and due the not enough samples of quality level 7 and 8 \
+it seems that this variable isn't contributing much to quality**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, sulphates_quality}
+ggplot(data = red, aes(y = sulphates, x= as.integer(as.vector(quality)))) +
+  geom_point(alpha = .3) +
+  scale_y_continuous(breaks = seq(0,quantile(red$sulphates,0.99),0.1))+
+  scale_x_continuous(breaks = seq(3,
+                              quantile(with(red,as.integer(as.vector(quality)))
+                                           ,0.99))) +
+  coord_cartesian(ylim = c(min(red$sulphates),
+                           quantile(red$sulphates,0.99)),
+                  xlim = c(3,
+                           quantile(with(red,as.integer(as.vector(quality)))
+                                    ,0.99))) +
+  xlab('Quality')
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, density_quality}
+ggplot(data = red, aes(y = density, x= as.integer(as.vector(quality)))) +
+  geom_point(alpha = .05, position = 'jitter') +
+  scale_y_continuous(breaks = seq(0,quantile(red$density,0.99),0.001))+
+  scale_x_continuous(breaks = seq(3,
+                              quantile(with(red,as.integer(as.vector(quality)))
+                                           ,0.99))) +
+  coord_cartesian(ylim = c(min(red$density),
+                           quantile(red$density,0.99)),
+                  xlim = c(3,
+                           quantile(with(red,as.integer(as.vector(quality)))
+                                    ,0.99))) +
+  xlab('Quality')
+```
+
+**This Analysis Didn't help much as I see most of the data is between 0.995 and \
+0.998**
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, density_quality}
+ggplot(data = red, aes(y = alcohol, x= as.integer(as.vector(quality)))) +
+  geom_point(alpha = .05, position = 'jitter') +
+  scale_y_continuous(breaks = seq(0,quantile(red$alcohol,0.99),0.5))+
+  scale_x_continuous(breaks = seq(3,
+                              quantile(with(red,as.integer(as.vector(quality)))
+                                           ,0.99))) +
+  coord_cartesian(ylim = c(min(red$alcohol),
+                           quantile(red$alcohol,0.99)),
+                  xlim = c(3,
+                           quantile(with(red,as.integer(as.vector(quality)))
+                                    ,0.99))) +
+  xlab('Quality')
+```
+
+**Alcohol does affect the quality as per the plot, as I see a trend with the \ 
+increase of the alcohol**
+
+# Bivariate Analysis
 
 ### Talk about some of the relationships you observed in this part of the \
 investigation. How did the feature(s) of interest vary with other features in \
