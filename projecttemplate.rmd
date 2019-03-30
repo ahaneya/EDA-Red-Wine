@@ -55,20 +55,20 @@ ggplot(data = red, aes(x = as.integer(as.vector(quality)))) +
 ```
 ** Most of the wine samples are centered on 5, 6, 7 the extreme low and extreme <br> low can be considered as outliers **
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
+```{r echo=FALSE, message=FALSE, warning=FALSE, density}
 ggplot(data = red, aes(x = density)) +
   geom_histogram() +
   ggtitle('Histogram of wine densities distrubition')
 ```
 ** Density of the wine is normally distributed **
-```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
+```{r echo=FALSE, message=FALSE, warning=FALSE, fixed.acidity}
 ggplot(data = red, aes(x = fixed.acidity)) +
   geom_histogram() +
   ggtitle('Histogram of wine fixed acidity distrubition')
 ```
 
 ** Most of the fixed acidity data is between 6 and 10 and the plot is right <br> skewed**
-```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
+```{r echo=FALSE, message=FALSE, warning=FALSE, volatile.acidity}
 ggplot(data = red, aes(x = volatile.acidity)) +
   geom_histogram() +
   ggtitle('Histogram of wine Volatile Acidity distrubition')
@@ -76,7 +76,7 @@ ggplot(data = red, aes(x = volatile.acidity)) +
 
 ** Data points are between 0.2 and 0.8 and the plot is right skewed **
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
+```{r echo=FALSE, message=FALSE, warning=FALSE, citric.acid}
 ggplot(data = red, aes(x = citric.acid)) +
   geom_histogram() +
   ggtitle('Histogram of wine Citric Acid distrubition')
@@ -84,7 +84,7 @@ ggplot(data = red, aes(x = citric.acid)) +
 
 ** Citric acid at 0.0 has the highest count next to it 0.50 **
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
+```{r echo=FALSE, message=FALSE, warning=FALSE, residual.sugar}
 ggplot(data = red, aes(x = residual.sugar)) +
   geom_histogram() +
   ggtitle('Histogram of wine Residual Sugar distrubition')
@@ -92,7 +92,7 @@ ggplot(data = red, aes(x = residual.sugar)) +
 
 ** Right skewed plot with most of the data points at 2 **
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
+```{r echo=FALSE, message=FALSE, warning=FALSE, chlorides}
 ggplot(data = red, aes(x = chlorides)) +
   geom_histogram() +
   ggtitle('Histogram of wine Chlorides distrubition')
@@ -100,28 +100,20 @@ ggplot(data = red, aes(x = chlorides)) +
 
 ** Right skewed plot with most of the points arounf 0.1 **
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
+```{r echo=FALSE, message=FALSE, warning=FALSE, free.sulfur.dioxide}
 ggplot(data = red, aes(x = free.sulfur.dioxide)) +
   geom_histogram() +
   ggtitle('Histogram of wine Free Sulfur Dioxide distrubition')
 ```
  ** Right skewed plot with lower values having more count **
  
-```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
+```{r echo=FALSE, message=FALSE, warning=FALSE, total.sulfur.dioxide}
 ggplot(data = red, aes(x = total.sulfur.dioxide)) +
   geom_histogram() +
   ggtitle('Histogram of wine Total Sulfur Dioxide distrubition')
 ``` 
 
 **Most of the wine samples are centered on 5, 6, 7 the extreme low and extreme <br> low can be considered as outliers**
-
-```{r echo=FALSE, message=FALSE, warning=FALSE, density_plot}
-ggplot(data = red, aes(x = density)) +
-  geom_histogram() +
-  ggtitle('Histogram of wine densities distrubition')
-```
-
-**Density of the wine is normally distributed**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, fixed.acidity_plot}
 ggplot(data = red, aes(x = fixed.acidity)) +
