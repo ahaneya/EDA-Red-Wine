@@ -225,19 +225,19 @@ Quality is a catagorical variable ordered from 0-10 where 0 is very bad and \ 10
 the other 11 variables are numrics (float).
 
 ### What is/are the main feature(s) of interest in your dataset?
--Residual.sugar
--Alcohol
--volitile.acidity
--citric.acid
--quality
+- Residual.sugar
+- Alcohol
+- Volitile.acidity
+- Citric.acid
+- Quality
 I will keep investigating to see a relevant other main feature in the dataset
 
 ### What other features in the dataset do you think will help support your \
 investigation into your feature(s) of interest?
--pH
--total.sulfur.dioxide
--fixed.acidity
--density
+- pH
+- total.sulfur.dioxide
+- fixed.acidity
+- density
 
 ### Did you create any new variables from existing variables in the dataset?
 No
