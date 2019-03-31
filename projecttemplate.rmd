@@ -516,7 +516,7 @@ ggplot(data = red, aes(x = alcohol, y= volatile.acidity)) +
 ```
 
 
-```{r, mean_groupping}
+```{r mean_groupping}
 ## grouping by quality and calculating the means for some features
 quality_groupped <- group_by(red,quality)
 
@@ -529,7 +529,7 @@ groupped_quality.means <- summarise(quality_groupped,
 ```
 
 
-```{r,echo=FALSE, message=FALSE, warning=FALSE, quality_all.means}
+```{r echo=FALSE, message=FALSE, warning=FALSE, quality_all.means}
 ggplot(data = groupped_quality.means, aes(x = as.integer(as.vector(quality)))) +
   geom_line(aes(y = mean_alcohol) ,colour = 'black') +
   geom_line(aes(y = mean_residual.sugar), colour = 'red', linetype = 4) +
@@ -541,22 +541,23 @@ ggplot(data = groupped_quality.means, aes(x = as.integer(as.vector(quality)))) +
   xlab('Quality')
 ```
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, free.sulfur.dioxide_alcohol_quality}
+```{r echo=FALSE, message=FALSE, warning=FALSE, free.sulfur.dioxide_alcohol_quality}
 ggplot(data = red, aes(x = alcohol, y = free.sulfur.dioxide)) +
   facet_wrap(~quality) +
   geom_smooth()
 ```
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, cutting_pH}
+```{r echo=FALSE, message=FALSE, warning=FALSE, cutting_pH}
 ## Testing with cutting a pH
 red$pH.bucket <- cut(red$pH, c(2.740,3.210,3.310,3.311,3.400))
+
 ggplot(data = subset(red, !is.na(pH.bucket)), 
        aes(x = as.integer(as.vector(quality)), y = alcohol)) +
   geom_smooth(aes(colour = pH.bucket))
 ```
 
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE,, cutting_tsd}
+```{r echo=FALSE, message=FALSE, warning=FALSE, cutting_tsd}
 ## Testing with cutting a total.sulfur.dioxide
  red$tsd.bucket <- cut(red$total.sulfur.dioxide, c(1,10,20,30,40,50,60))
 
@@ -565,7 +566,7 @@ ggplot(data = subset(red, !is.na(tsd.bucket)), aes( x = alcohol, y = density)) +
   facet_wrap(~quality)
 ```
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE,alcohol_density_quality}
+```{r echo=FALSE, message=FALSE, warning=FALSE,alcohol_density_c_quality}
 ggplot(data = subset(red, !is.na(tsd.bucket)), aes( x = alcohol, y = density)) +
   geom_point(aes(color = quality), alpha = 1/3, position = 'jitter') +
   coord_cartesian(xlim = c(8.40, quantile(red$alcohol,0.99)),
@@ -577,7 +578,9 @@ ggplot(data = subset(red, !is.na(tsd.bucket)), aes( x = alcohol, y = density)) +
 0.996 and 0.993, so higher alcohol lower density does affect the quality of red \
 wine**
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, densit_alcohol_quality_rs.bucket}
+```{r echo=FALSE, message=FALSE, warning=FALSE, densit_alcohol_quality_rs.bucket}
+red$residual.sugar.bucket <- cut(red$residual.sugar,c(1,3,4,6,8,9))
+
 ggplot(data = subset(red, !is.na(residual.sugar.bucket)), 
        aes( x = alcohol, y = density)) +
   geom_point(aes(color = quality) , alpha = 1, position = 'jitter') +
@@ -592,7 +595,7 @@ points concentation in bucket (1,3] and (3,4], so in conclusion residual.sugar \
 is an contributing factor for the quality**
 
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, fsd_sulphates_quality}
+```{r echo=FALSE, message=FALSE, warning=FALSE, fsd_sulphates_quality}
 ggplot(data = red, aes(x = sulphates, y= free.sulfur.dioxide)) +
   geom_point(aes(color = 'orange'), alpha = 1/5, position = 'jitter') +
   scale_x_continuous(breaks = seq(0,max(red$sulphates),.1))+
@@ -607,7 +610,7 @@ ggplot(data = red, aes(x = sulphates, y= free.sulfur.dioxide)) +
 
 **With sulphates value on average increases quality does increase**
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE, sulphates_alcohol_quality}
+```{r echo=FALSE, message=FALSE, warning=FALSE, sulphates_alcohol_quality}
 ggplot(data = red, aes(x = sulphates, y= alcohol)) +
   geom_point(aes(color = 'orange'), alpha = 1/5, position = 'jitter') +
   scale_x_continuous(breaks = seq(0,max(red$sulphates),.1))+
@@ -643,6 +646,7 @@ red wine quality**
 # Final Plots and Summary
 
 ### Plot One
+
 ```{r echo=FALSE, Plot_One}
 ggplot(data = subset(red, !is.na(residual.sugar.bucket)), aes( x = alcohol, y =
                                                                  density)) +
@@ -660,6 +664,7 @@ ggplot(data = subset(red, !is.na(residual.sugar.bucket)), aes( x = alcohol, y =
 first 2 buckets from top left we have almost no red and yellow points**
 
 ### Plot Two
+
 ```{r echo=FALSE, Plot_Two}
 ggplot(data = red, aes(y = alcohol, x= as.integer(as.vector(quality)))) +
   geom_point(alpha = .06, position = 'jitter') +
@@ -683,6 +688,7 @@ ggplot(data = red, aes(y = alcohol, x= as.integer(as.vector(quality)))) +
 median and mean lines shows this clearly**
 
 ### Plot Three
+
 ```{r echo=FALSE, Plot_Three}
 ggplot(data = red, aes(y = volatile.acidity, 
                        x= as.integer(as.vector(quality)))) +
@@ -703,11 +709,12 @@ ggplot(data = red, aes(y = volatile.acidity,
 
 **This plot yet shows another relation between quality and volatile.acidity, \
 and its expressed evenmore with mean line of volatile.acidity**
-------
+
+
 
 # Reflection
 
-** I guess not having enough samples of very high quality of red wine made this \
+**I guess not having enough samples of very high quality of red wine made this \
 analysis a bit tougher, the same can be said on the very low quality of red \
 wine, but in the end I found some interesting findings of some features like \
 sulphates, and I was successful in assiging some main features in the begining \
