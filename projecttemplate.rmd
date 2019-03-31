@@ -536,7 +536,8 @@ ggplot(data = groupped_quality.means, aes(x = as.integer(as.vector(quality)))) +
   geom_line(aes(y = mean_density), colour = 'blue', linetype = 4) +
   geom_line(aes(y = mean_volatile_acidity), colour = 'green', linetype = 4) +
   geom_line(aes(y = mean_citric.acid), colour = 'darkblue', linetype = 4) +
-  scale_color_discrete(name = 'Means', labels = c('Alcohol','sugar','density','volatile','citric'))+
+  scale_color_discrete(name = 'Means', 
+                       labels = c('Alcohol','sugar','density','volatile','citric'))+
   xlab('Quality')
 ```
 
@@ -549,7 +550,8 @@ ggplot(data = red, aes(x = alcohol, y = free.sulfur.dioxide)) +
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, cutting_pH}
 ## Testing with cutting a pH
 red$pH.bucket <- cut(red$pH, c(2.740,3.210,3.310,3.311,3.400))
-ggplot(data = subset(red, !is.na(pH.bucket)), aes(x = as.integer(as.vector(quality)), y = alcohol)) +
+ggplot(data = subset(red, !is.na(pH.bucket)), 
+       aes(x = as.integer(as.vector(quality)), y = alcohol)) +
   geom_smooth(aes(colour = pH.bucket))
 ```
 
@@ -576,7 +578,8 @@ ggplot(data = subset(red, !is.na(tsd.bucket)), aes( x = alcohol, y = density)) +
 wine**
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, densit_alcohol_quality_rs.bucket}
-ggplot(data = subset(red, !is.na(residual.sugar.bucket)), aes( x = alcohol, y = density)) +
+ggplot(data = subset(red, !is.na(residual.sugar.bucket)), 
+       aes( x = alcohol, y = density)) +
   geom_point(aes(color = quality) , alpha = 1, position = 'jitter') +
   coord_cartesian(xlim = c(8.40, quantile(red$alcohol,0.99)),
                   ylim = c(0.9901, quantile(red$density, 0.99))) +
@@ -641,7 +644,8 @@ red wine quality**
 
 ### Plot One
 ```{r echo=FALSE, Plot_One}
-ggplot(data = subset(red, !is.na(residual.sugar.bucket)), aes( x = alcohol, y = density)) +
+ggplot(data = subset(red, !is.na(residual.sugar.bucket)), aes( x = alcohol, y =
+                                                                 density)) +
   geom_point(aes(color = quality) , alpha = 1, position = 'jitter') +
   coord_cartesian(xlim = c(8.40, quantile(red$alcohol,0.99)),
                   ylim = c(0.9901, quantile(red$density, 0.99))) +
@@ -680,14 +684,17 @@ median and mean lines shows this clearly**
 
 ### Plot Three
 ```{r echo=FALSE, Plot_Three}
-ggplot(data = red, aes(y = volatile.acidity, x= as.integer(as.vector(quality)))) +
+ggplot(data = red, aes(y = volatile.acidity, 
+                       x= as.integer(as.vector(quality)))) +
   geom_point(alpha = .3, position = 'jitter') +
   scale_y_continuous(breaks = seq(0,quantile(red$volatile.acidity,0.99),.1))+
-  scale_x_continuous(breaks = seq(3,quantile(with(red,as.integer(as.vector(quality))),0.99))) +
+  scale_x_continuous(breaks = seq(3,quantile(with(red,
+                                      as.integer(as.vector(quality))),0.99))) +
   coord_cartesian(ylim = c(min(red$volatile.acidity),
                            quantile(red$volatile.acidity,0.99)),
                   xlim = c(3,
-                           quantile(with(red,as.integer(as.vector(quality))),0.99))) +
+                           quantile(with(red,
+                                      as.integer(as.vector(quality))),0.99))) +
   xlab('Quality') +
   geom_line(stat = 'summary', fun.y = mean)
 ```
