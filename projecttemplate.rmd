@@ -144,7 +144,9 @@ ggplot(data = red, aes(x = residual.sugar)) +
   scale_x_continuous(breaks = seq(0,8.1,1))
 ```
 
-**Right skewed plot with most of the data points at 2, I will note zoom in <br> further as I will loose a lot of data points and we have a small number of observations**
+**Right skewed plot with most of the data points at 2, I will note zoom in \
+further as I will loose a lot of data points and we have a small number of \
+observations**
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, chlorides}
@@ -177,7 +179,8 @@ ggplot(data = red, aes(x = free.sulfur.dioxide)) +
   ggtitle('Histogram of wine Free Sulfur Dioxide distrubition')
 ```
 
- **Right skewed plot with lower values having more count and probably any \ thing more than 40 could be an outlier**
+ **Right skewed plot with lower values having more count and probably any \
+ thing more than 40 could be an outlier**
  
  
 ```{r echo=FALSE, message=FALSE, warning=FALSE, total.sulfur.dioxide}
@@ -219,10 +222,11 @@ ggplot(data = red, aes(x = alcohol)) +
 
 ### What is the structure of your dataset?
 
-12 variable (feature) with one outcome (quality)
-1599 Observations
-Quality is a catagorical variable ordered from 0-10 where 0 is very bad and \ 10 very excellent and needs to be converted into ordered factor.
-the other 11 variables are numrics (float).
+- 12 variable (feature) with one outcome (quality).
+- 1599 Observations.
+- Quality is a catagorical variable ordered from 0-10 where 0 is very bad and \ 
+10 very excellent and needs to be converted into ordered factor.
+- There other 11 variables are numrics (float).
 
 ### What is/are the main feature(s) of interest in your dataset?
 - Residual.sugar
@@ -285,11 +289,14 @@ ggplot(data = red, aes(x = density, y= alcohol)) +
 ggplot(data = red, aes(y = volatile.acidity, x= as.integer(as.vector(quality)))) +
   geom_point(alpha = .3, position = 'jitter') +
   scale_y_continuous(breaks = seq(0,quantile(red$volatile.acidity,0.99),.1))+
-  scale_x_continuous(breaks = seq(3,quantile(with(red,as.integer(as.vector(quality))),0.99))) +
+  scale_x_continuous(breaks = seq(3,
+                                  quantile(with(red,
+                                      as.integer(as.vector(quality))),0.99))) +
   coord_cartesian(ylim = c(min(red$volatile.acidity),
                            quantile(red$volatile.acidity,0.99)),
                   xlim = c(3,
-                           quantile(with(red,as.integer(as.vector(quality))),0.99))) +
+                           quantile(with(red,
+                                      as.integer(as.vector(quality))),0.99))) +
   xlab('Quality') +
   geom_line(stat = 'summary', fun.y = mean)
 
@@ -315,7 +322,8 @@ ggplot(data = red, aes(y = chlorides, x= as.integer(as.vector(quality)))) +
 **Quality at its best when the chlorides is between 0.05 and  0.1**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, total.sulfur.dioxide_quality}
-ggplot(data = red, aes(y = total.sulfur.dioxide, x= as.integer(as.vector(quality)))) +
+ggplot(data = red, aes(y = total.sulfur.dioxide,
+                       x= as.integer(as.vector(quality)))) +
   geom_point(alpha = .5, position = 'jitter') +
   scale_y_continuous(breaks = seq(0,quantile(red$total.sulfur.dioxide,0.99),5))+
   scale_x_continuous(breaks = seq(3,
@@ -336,7 +344,8 @@ coorelated variable another point to be considered is that there is not enough \
 samples with quality level 3, 4, 8**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, free.sulfur.dioxide_quality}
-ggplot(data = red, aes(y = free.sulfur.dioxide, x= as.integer(as.vector(quality)))) +
+ggplot(data = red, aes(y = free.sulfur.dioxide,
+                       x= as.integer(as.vector(quality)))) +
   geom_point(alpha = .3, position = 'jitter') +
   scale_y_continuous(breaks = seq(0,quantile(red$free.sulfur.dioxide,0.99),5))+
   scale_x_continuous(breaks = seq(3,
@@ -370,8 +379,8 @@ ggplot(data = red, aes(y = sulphates, x= as.integer(as.vector(quality)))) +
   geom_line(stat = 'summary', fun.y = mean, color = 'blue')
 ```
 
-**Sulphates & Quality: drawing the mean and median layers showed that the increase \
-of sulphates contributes to better quality.**
+**Sulphates & Quality: drawing the mean and median layers showed that the \ 
+increase of sulphates contributes to better quality.**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, density_quality}
 ggplot(data = red, aes(y = density, x= as.integer(as.vector(quality)))) +
@@ -449,16 +458,16 @@ ggplot(data = red, aes(x = sulphates, y= free.sulfur.dioxide)) +
 investigation. How did the feature(s) of interest vary with other features in \
 the dataset?
 
-**Alcohol $ residual.sugar: even by omitting the top 1% and zooming in, I still \
- see no relation between the alcohol and residual.sugar.**
+**Alcohol $ residual.sugar: even by omitting the top 1% and zooming in, \ 
+I still see no relation between the alcohol and residual.sugar.**
  
-**Volatile.acidity & quality: I can see with the lower values of volatile.acidity \
- the quality increases**
+**Volatile.acidity & quality: I can see with the lower values of \
+volatile.acidity the quality increases**
  
 **Alcohol & quality: the increase of alcohol indeed increases the quality** 
 
-**Alcohol & density: I can see a -ve correlation between these 2 features, I will \
- these against quality to see how do they contribute to it.**
+**Alcohol & density: I can see a -ve correlation between these 2 features, \
+I will these against quality to see how do they contribute to it.**
  **Quality & density: at a first look on the scatter I couldn't find a relation \
 but after adding 2 geom_line of median and mean , I can tell that on average \
 lower density can mean a better quality.**
@@ -468,8 +477,9 @@ lower density can mean a better quality.**
 
 **Chlorides & Quality: I don't see a relation between these 2.**
 
-**Total.sulfur.dioxide & quality: generally a lower values of TSD can mean a better \
- quality this relation needs to be investigated further with more variables**
+**Total.sulfur.dioxide & quality: generally a lower values of TSD can mean a \ 
+better quality this relation needs to be investigated further with more \
+variables**
  
 **Alcohol & sulphates: there is a relation especially between sulphate value \
  0.4 and 0.8**
