@@ -1,7 +1,7 @@
 Red Wine Quality EDA by Anas Haneya
 ========================================================
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, packages}
+```{r message=FALSE, warning=FALSE, include=FALSE}
 # Load all of the packages that you end up using in your analysis in this code
 # chunk.
 
@@ -270,83 +270,88 @@ red$quality <- as.ordered(red$quality)
 
 ```{r}
 #create a function to reduce redunduncy 
-#This function takes 6 parameters to dynamically plot
+#This function takes 6 parameters to dynamically plot:
+# dataset (dataframe), x (x - axis), y (y-axis), xlabel, ylabel,
+# alpha for scatter plot with a default value of 1
 
 bi_fun <- function(dataset, x , y, xlabel, ylabel, alpha = 1) {
+    #setting len_out to 8 to be default for non factor variables
+    # len_out <- 8
+    #defining df, df$c and df$y to avoid the ggplot issue if assiging the 
+    #variables
     df <- dataset
     df$x = df[,which(names(df)==x)]
     df$y = df[,which(names(df)==y)]
+    # converting order factor to integer for ploting
+    if (class(df$x)[1] == "ordered" | class(df$x)[1] == "factor") {
+        df$x <- as.integer(as.vector(df$x))
+        # len_out <- 6
+    }
+    if (class(df$y)[1] == "ordered" | class(df$y)[1] == "factor") {
+        df$y <- as.integer(as.vector(df$y))
+        # len_out <- 6
+    }
   return(ggplot(data = df, aes(x = df$x, y= df$y))+
            geom_point(alpha = alpha, position = 'jitter') +
-           scale_x_continuous(breaks = seq(min(df$x), quantile(df$x,0.99))) +
-           scale_y_continuous(breaks = seq(min(df$y),quantile(df$y,0.99))) +
+           # scale_x_continuous(breaks = seq(min(df$x), quantile(df$x,0.99),
+           #                                 length.out = len_out)) +
+           # scale_y_continuous(breaks = seq(min(df$y), quantile(df$y,0.99), 
+           #                                 length.out = len_out)) +
            coord_cartesian( xlim = c(min(df$x), quantile(df$x,0.99)),
                             ylim = c(min(df$y), quantile(df$y,0.99))) +
            xlab(xlabel) +
            ylab(ylabel))
 }
-
 ```
 
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, residual.sugra_alcohol}
-
+```{r echo=FALSE, fig.height=max, fig.width=max, message=FALSE, warning=FALSE}
+# Scatter plot of Residual.sugar & alcohol
 bi_fun(red, 'residual.sugar','alcohol', 'residual sugar (g / dm^3)',
        'alcohol (% by volume)', 0.5) +
-      ggtitle('Scatter plot of Residual.sugar & alcohol')
-
+      ggtitle('Scatter plot of Residual.sugar & alcohol with a line smoother') +
+      geom_smooth()
 ```
 
-**There is no significant releation between the residual.sugra and alcohol**
+**There is no significant relation between the residual.sugra and alcohol**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, density_alcohol}
-ggplot(data = red, aes(x = density, y= alcohol)) +
-  geom_point(aes(color = 'orange'), alpha = 1/4, position = 'jitter') +
-  scale_x_continuous(breaks = seq(0,max(red$density),.01))+
-  scale_y_continuous(breaks = seq(0,max(red$alcohol),.5)) +
-  coord_cartesian(xlim = c(min(red$density),
-                           quantile(red$density,0.99)),
-                  ylim = c(min(red$alcohol),
-                           quantile(red$alcohol,0.99))) 
+# Scatter plot of Density & alcohol
+bi_fun(red, 'density', 'alcohol', 'density (g / cm^3)', 'alcohol (% by volume)',
+       0.25) +
+  ggtitle('Scatter plot of Density & alcohol with line smoother') + 
+  geom_smooth()
 ```
 
-**There is a -ve kind of strong corelationbetween alcohol and density**
+**There is a -ve kind of strong correlation between alcohol and density**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, quality_volatile.acidity}
-ggplot(data = red, aes(y = volatile.acidity, x= as.integer(as.vector(quality)))) +
-  geom_point(alpha = .3, position = 'jitter') +
-  scale_y_continuous(breaks = seq(0,quantile(red$volatile.acidity,0.99),.1))+
-  scale_x_continuous(breaks = seq(3,
-                                  quantile(with(red,
-                                      as.integer(as.vector(quality))),0.99))) +
-  coord_cartesian(ylim = c(min(red$volatile.acidity),
-                           quantile(red$volatile.acidity,0.99)),
-                  xlim = c(3,
-                           quantile(with(red,
-                                      as.integer(as.vector(quality))),0.99))) +
-  xlab('Quality') +
-  geom_line(stat = 'summary', fun.y = mean)
-
+# Scatter plot of Quality with Volatile.acidity
+bi_fun(red, 'quality','volatile.acidity', 'Quality (0-10)',
+       'volatile acidity (acetic acid - g / dm^3)', 0.3) +
+  ggtitle('Scatter plot of Quality with Volatile.acidity') +
+  geom_line(stat = 'summary', fun.y = mean, aes(color = 'Mean')) +
+  geom_line(stat = 'summary', fun.y = median, aes(color = 'Median')) +
+  scale_color_manual(values = c('Mean' = 'red', 'Median' = 'blue')) +
+  labs(color = 'Lines')
 ```
 
 **It seems with decrese of the volatile.acidity the quality increases on average**
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, residual.sugar_quality}
-ggplot(data = red, aes(y = chlorides, x= as.integer(as.vector(quality)))) +
-  geom_point(alpha = .3, position = 'jitter') +
-  scale_y_continuous(breaks = seq(0,quantile(red$chlorides,0.99),.1))+
-  scale_x_continuous(breaks = seq(3,
-                              quantile(with(red,as.integer(as.vector(quality)))
-                                           ,0.99))) +
-  coord_cartesian(ylim = c(min(red$chlorides),
-                           quantile(red$chlorides,0.99)),
-                  xlim = c(3,
-                           quantile(with(red,as.integer(as.vector(quality)))
-                                    ,0.99))) +
-  xlab('Quality')
+```{r echo=FALSE, message=FALSE, warning=FALSE, chlorides_quality}
+# Scatter plot of Quality with chlorides
+bi_fun(red, 'quality','chlorides', 'Quality (0-10)',
+       'chlorides (sodium chloride - g / dm^3)', 0.3) +
+  ggtitle('Scatter plot of Quality with chlorides') +
+  geom_line(stat = 'summary', fun.y = mean, aes(color = 'Mean')) +
+  geom_line(stat = 'summary', fun.y = median, aes(color = 'Median')) +
+  scale_color_manual(values = c('Mean' = 'red', 'Median' = 'blue')) +
+  labs(color = 'Lines')
+  
 ```
 
-**Quality at its best when the chlorides is between 0.05 and  0.1**
+**Quality at its best when the chlorides is between 0.05 and  0.1, also I can \
+see that with the decrese of chlorides on average the quality goes up**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, total.sulfur.dioxide_quality}
 ggplot(data = red, aes(y = total.sulfur.dioxide,
