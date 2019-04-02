@@ -21,6 +21,12 @@ library(dplyr)
 library(GGally)
 ```
 
+```{r}
+#Disabling all messages, wornings and echo
+knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
+```
+
+
 ```{r echo=FALSE, Load_the_Data}
 # Load the Data
 red <- read.csv('wineQualityReds.csv')
@@ -31,53 +37,71 @@ red <- read.csv('wineQualityReds.csv')
 # Univariate Plots Section
 
 ```{r echo=FALSE, structure}
+# Data structure
 str(red)
 ```
 
 
 ```{r echo=FALSE, dim}
+# Dataset dimensions
 dim(red)
 ```
 
 
 ```{r echo=FALSE, summary}
+# dataset 5 number summary
 summary(red)
 ```
 
 ```{r echo=FALSE, nulls_check}
+# nulls check
 sum(is.na(red))
 ```
 
+```{r function_univariate}
+# Function to avoid redunduncy
+
+uni_fun <- function(dataset, feature, title, xlabel = NULL,
+                    ylabel = 'Count', binwidth = NULL) {
+
+  return(ggplot(data = dataset, aes_string(x = feature))
+              + geom_histogram(binwidth = binwidth) +
+                ggtitle(title) +
+                xlab(xlabel) +
+                ylab(ylabel))
+}
+```
+
+
 ```{r echo=FALSE, message=FALSE, warning=FALSE, quality_plot}
-ggplot(data = red, aes(x = as.integer(as.vector(quality)))) +
-  geom_histogram() +
-  ggtitle('Histogram of wine qualities distrubition')
+# using ggplot2 library
+uni_fun(red, 'quality', 'Histogram of wine qualities distrubition', 
+        'Quality (0-10)', 'Count')
 ```
 
 **Most of the wine samples are centered on 5, 6, 7 the extreme low and extreme \
-low can be considered as outliers**
+low can be considered as outliers or not enough samples**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, density}
-ggplot(data = red, aes(x = density)) +
-  geom_histogram() +
-  ggtitle('Histogram of wine densities distrubition')
+#Histogram of density
+uni_fun(red, 'density', 'Histogram of wine densities distrubition',
+        'Density (g / cm^3)', 'Count')
 ```
 
 **Density of the wine is normally distributed**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, fixed.acidity}
-ggplot(data = red, aes(x = fixed.acidity)) +
-  geom_histogram() +
-  ggtitle('Histogram of wine fixed acidity distrubition')
+#histogram of fixed.acidity
+uni_fun(red, 'fixed.acidity', 'Histogram of wine fixed acidity distrubition')
 ```
 
 **Most of the fixed acidity data is between 6 and 10 and the plot is right \
 skewed**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE,fixed.acidity_plot2}
-ggplot(data = red, aes(x = fixed.acidity)) +
-  geom_histogram(binwidth = .1) +
-  ggtitle('Histogram of wine fixed acidity distrubition')+
+#fixed.acidity with a smaller binwidth and a bit of zooming
+uni_fun(red, 'fixed.acidity', 'Histogram of wine fixed acidity distrubition',
+        'fixed acidity (tartaric acid - g / dm^3)' , 'Count' ,0.1) +
   scale_x_continuous(breaks = seq(4,12,1), limits = c(4.5,13))
 ```
 
@@ -89,18 +113,20 @@ acidity is almost normally distribited**
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, volatile.acidity}
-ggplot(data = red, aes(x = volatile.acidity)) +
-  geom_histogram() +
-  ggtitle('Histogram of wine Volatile Acidity distrubition')
+#Histogram of volatile.acidity
+uni_fun(red, 'volatile.acidity', 
+        'Histogram of wine Volatile Acidity distrubition',
+        'volatile acidity (acetic acid - g / dm^3)','Count')
 ```
 
 **Data points are between 0.2 and 0.8 and the plot is right skewed**
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, volatile.acidity_plot}
-ggplot(data = red, aes(x = volatile.acidity)) +
-  geom_histogram(binwidth = 0.01) +
-  ggtitle('Histogram of wine Volatile Acidity distrubition') +
+#Histogram of volatile.acidity with a smaller binwidth
+uni_fun(red, 'volatile.acidity', 
+        'Histogram of wine Volatile Acidity distrubition',
+        'volatile acidity (acetic acid - g / dm^3)','Count', 0.01) +
   scale_x_continuous(breaks = seq(0,1.6,0.1))
 ```
 
@@ -108,17 +134,19 @@ ggplot(data = red, aes(x = volatile.acidity)) +
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, citric.acid}
-ggplot(data = red, aes(x = citric.acid)) +
-  geom_histogram() +
-  ggtitle('Histogram of wine Citric Acid distrubition')
+#Histogram of citric acid
+uni_fun(red, 'citric.acid', 
+        'Histogram of wine Citric Acid distrubition',
+        'citric acid (g / dm^3)','Count') 
 ```
 
 **Citric acid at 0.0 has the highest count next to it 0.50**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, citric.acid_plot}
-ggplot(data = red, aes(x = citric.acid)) +
-  geom_histogram(binwidth = .01) +
-  ggtitle('Histogram of wine Citric Acid distrubition') +
+#Histogram of citric acid with smaller binwidth and with zooming
+uni_fun(red, 'citric.acid', 
+        'Histogram of wine Citric Acid distrubition',
+        'citric acid (g / dm^3)','Count',0.01) +
   coord_cartesian(xlim = c(0,0.8)) +
   scale_x_continuous(breaks = seq(0,0.8,0.1))
 ```
@@ -128,20 +156,20 @@ binwidth to 0.01 and zooing in to take out the outliers we have a clear view \
 over the data distribution**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, residual.sugar}
-ggplot(data = red, aes(x = residual.sugar)) +
-  geom_histogram() +
-  ggtitle('Histogram of wine Residual Sugar distrubition')
+#histogram of residual sugar
+uni_fun(red, 'residual.sugar', 'Histogram of wine Residual Sugar distrubition',
+        'residual sugar (g / dm^3)')
 ```
 
 **Right skewed plot with most of the data points at 2**
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, residual.sugar_plot}
-ggplot(data = red, aes(x = residual.sugar)) +
-  geom_histogram(binwidth = 0.1) +
-  ggtitle('Histogram of wine Residual Sugar distrubition') +
-  coord_cartesian(xlim = c(0,8.1)) + 
-  scale_x_continuous(breaks = seq(0,8.1,1))
+#histogram of residual sugar with a smaller binwidth
+uni_fun(red, 'residual.sugar', 'Histogram of wine Residual Sugar distrubition',
+        'residual sugar (g / dm^3)',,0.1) +
+coord_cartesian(xlim = c(0.6,8.1)) + 
+scale_x_continuous(breaks = seq(0.6,8.1,1))
 ```
 
 **Right skewed plot with most of the data points at 2, I will note zoom in \
@@ -150,72 +178,51 @@ observations**
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, chlorides}
-ggplot(data = red, aes(x = chlorides)) +
-  geom_histogram() +
-  ggtitle('Histogram of wine Chlorides distrubition')
-```
-
-**Right skewed plot with most of the points around 0.1**
-
-```{r echo=FALSE, message=FALSE, warning=FALSE, chlorides_plot}
-ggplot(data = red, aes(x = chlorides)) +
-  geom_histogram(binwidth = 0.01) +
-  ggtitle('Histogram of wine Chlorides distrubition')
+#HIstogram of Chlorides
+uni_fun(red, 'chlorides', 'Histogram of wine Chlorides distrubition',
+        'chlorides (sodium chloride - g / dm^3)')
 ```
 
 **Right skewed plot with most of the points around 0.1**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, free.sulfur.dioxide}
-ggplot(data = red, aes(x = free.sulfur.dioxide)) +
-  geom_histogram() +
-  ggtitle('Histogram of wine Free Sulfur Dioxide distrubition')
+uni_fun(red, 'free.sulfur.dioxide',
+        'Histogram of wine Free Sulfur Dioxide distrubition',
+        'free sulfur dioxide (mg / dm^3)')
 ```
 
-**Right skewed plot with lower values having more count**
-
-```{r echo=FALSE, message=FALSE, warning=FALSE, free.sulfur.dioxide_plot}
-ggplot(data = red, aes(x = free.sulfur.dioxide)) +
-  geom_histogram(binwidth = 1) +
-  ggtitle('Histogram of wine Free Sulfur Dioxide distrubition')
-```
-
- **Right skewed plot with lower values having more count and probably any \
+**Right skewed plot with lower values having more count and probably any \
  thing more than 40 could be an outlier**
  
- 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, total.sulfur.dioxide}
-ggplot(data = red, aes(x = total.sulfur.dioxide)) +
-  geom_histogram() +
-  ggtitle('Histogram of wine Total Sulfur Dioxide distrubition')
+#Total Sulfur dioxide histogram with log10 transformation
+uni_fun(red, 'total.sulfur.dioxide',
+'Histogram of wine Total Sulfur Dioxide distrubition',
+'total sulfur dioxide (mg / dm^3)') 
 ``` 
 
-
-```{r echo=FALSE, message=FALSE, warning=FALSE, total.sulfur.dioxide_plot}
-ggplot(data = red, aes(x = total.sulfur.dioxide)) +
-  geom_histogram(binwidth = 5, fill = 'orange') +
-  ggtitle('Histogram of wine Total Sulfur Dioxide distrubition')
-``` 
+**Right skewed plot**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, pH_plot}
-ggplot(data = red, aes(x = pH)) +
-  geom_histogram(binwidth = 0.01) +
-  ggtitle('Histogram of wine pH distrubition')
+#Histogram of the pH
+uni_fun(red,'pH','Histogram of wine pH distrubition', 'pH', 'Count' ,0.01)
 ``` 
 
 **pH is nomrmally distributied**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, sulphates_plot}
-ggplot(data = red, aes(x = sulphates)) +
-  geom_histogram(binwidth = 0.01) +
-  ggtitle('Histogram of wine Sulphate distrubition')
+#Histogram of sulphates
+uni_fun(red,'sulphates','Histogram of wine Sulphate distrubition', 
+        'sulphates (potassium sulphate - g / dm3)','Count',0.01)
 ``` 
+
+**Right skewed plot with values 0.3 to 1.0**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, alcohol_plot}
-ggplot(data = red, aes(x = alcohol)) +
-  geom_histogram(binwidth = 0.1) +
-  ggtitle('Histogram of wine Alcohol distrubition')
+#Histogram of the alcohol percentage by volume distribution in the dataset
+uni_fun(red, 'alcohol', 'Histogram of wine Alcohol distribution', 
+        'alcohol (% by volume)',,0.1)
 ``` 
-
 
 
 # Univariate Analysis
@@ -249,8 +256,8 @@ No
 ### Of the features you investigated, were there any unusual distributions? \
 Did you perform any operations on the data to tidy, adjust, or change the form \
 of the data? If so, why did you do this?
-No, data is in a well form, just a change on the data type of quality to \
-become ordered factor
+No, data is tidy from, and data quality is good, I just a change on the data \
+type of quality to become ordered factor
 
 
 ```{r, changing_quality_datatype}
