@@ -279,6 +279,7 @@ bi_fun <- function(dataset, x , y, xlabel, ylabel, alpha = 1) {
     # len_out <- 8
     #defining df, df$c and df$y to avoid the ggplot issue if assiging the 
     #variables
+    p <- NULL
     df <- dataset
     df$x = df[,which(names(df)==x)]
     df$y = df[,which(names(df)==y)]
@@ -286,21 +287,51 @@ bi_fun <- function(dataset, x , y, xlabel, ylabel, alpha = 1) {
     if (class(df$x)[1] == "ordered" | class(df$x)[1] == "factor") {
         df$x <- as.integer(as.vector(df$x))
         # len_out <- 6
+        p <-    ggplot(data = df, aes(x = df$x, y= df$y))+
+                geom_point(alpha = alpha, position = 'jitter') +
+                # scale_x_continuous(breaks = seq(min(df$x), quantile(df$x,0.99),
+                #                                 length.out = len_out)) +
+                # scale_y_continuous(breaks = seq(min(df$y), quantile(df$y,0.99), 
+                #                                 length.out = len_out)) +
+                coord_cartesian( xlim = c(min(df$x), quantile(df$x,0.99)),
+                                ylim = c(min(df$y), quantile(df$y,0.99))) +
+                xlab(xlabel) +
+                ylab(ylabel) + 
+                geom_line(stat = 'summary', fun.y = mean, aes(color = 'Mean')) +
+                geom_line(stat = 'summary', fun.y = median, aes(color = 'Median')) +
+                scale_color_manual(values = c('Mean' = 'red', 'Median' = 'blue')) +
+                labs(color = 'Lines')
     }
-    if (class(df$y)[1] == "ordered" | class(df$y)[1] == "factor") {
+    else if (class(df$y)[1] == "ordered" | class(df$y)[1] == "factor") {
         df$y <- as.integer(as.vector(df$y))
         # len_out <- 6
+                p <-    ggplot(data = df, aes(x = df$x, y= df$y))+
+                geom_point(alpha = alpha, position = 'jitter') +
+                # scale_x_continuous(breaks = seq(min(df$x), quantile(df$x,0.99),
+                #                                 length.out = len_out)) +
+                # scale_y_continuous(breaks = seq(min(df$y), quantile(df$y,0.99), 
+                #                                 length.out = len_out)) +
+                coord_cartesian( xlim = c(min(df$x), quantile(df$x,0.99)),
+                                ylim = c(min(df$y), quantile(df$y,0.99))) +
+                xlab(xlabel) +
+                ylab(ylabel) + 
+                geom_line(stat = 'summary', fun.y = mean, aes(color = 'Mean')) +
+                geom_line(stat = 'summary', fun.y = median, aes(color = 'Median')) +
+                scale_color_manual(values = c('Mean' = 'red', 'Median' = 'blue')) +
+                labs(color = 'Lines')
     }
-  return(ggplot(data = df, aes(x = df$x, y= df$y))+
-           geom_point(alpha = alpha, position = 'jitter') +
-           # scale_x_continuous(breaks = seq(min(df$x), quantile(df$x,0.99),
-           #                                 length.out = len_out)) +
-           # scale_y_continuous(breaks = seq(min(df$y), quantile(df$y,0.99), 
-           #                                 length.out = len_out)) +
-           coord_cartesian( xlim = c(min(df$x), quantile(df$x,0.99)),
-                            ylim = c(min(df$y), quantile(df$y,0.99))) +
-           xlab(xlabel) +
-           ylab(ylabel))
+     else 
+       p <-    ggplot(data = df, aes(x = df$x, y= df$y))+
+                geom_point(alpha = alpha, position = 'jitter') +
+                # scale_x_continuous(breaks = seq(min(df$x), quantile(df$x,0.99),
+                #                                 length.out = len_out)) +
+                # scale_y_continuous(breaks = seq(min(df$y), quantile(df$y,0.99), 
+                #                                 length.out = len_out)) +
+                coord_cartesian( xlim = c(min(df$x), quantile(df$x,0.99)),
+                                ylim = c(min(df$y), quantile(df$y,0.99))) +
+                xlab(xlabel) +
+                ylab(ylabel)
+  return(p)
 }
 ```
 
@@ -329,11 +360,7 @@ bi_fun(red, 'density', 'alcohol', 'density (g / cm^3)', 'alcohol (% by volume)',
 # Scatter plot of Quality with Volatile.acidity
 bi_fun(red, 'quality','volatile.acidity', 'Quality (0-10)',
        'volatile acidity (acetic acid - g / dm^3)', 0.3) +
-  ggtitle('Scatter plot of Quality with Volatile.acidity') +
-  geom_line(stat = 'summary', fun.y = mean, aes(color = 'Mean')) +
-  geom_line(stat = 'summary', fun.y = median, aes(color = 'Median')) +
-  scale_color_manual(values = c('Mean' = 'red', 'Median' = 'blue')) +
-  labs(color = 'Lines')
+  ggtitle('Scatter plot of Quality with Volatile.acidity') 
 ```
 
 **It seems with decrese of the volatile.acidity the quality increases on average**
@@ -342,32 +369,18 @@ bi_fun(red, 'quality','volatile.acidity', 'Quality (0-10)',
 # Scatter plot of Quality with chlorides
 bi_fun(red, 'quality','chlorides', 'Quality (0-10)',
        'chlorides (sodium chloride - g / dm^3)', 0.3) +
-  ggtitle('Scatter plot of Quality with chlorides') +
-  geom_line(stat = 'summary', fun.y = mean, aes(color = 'Mean')) +
-  geom_line(stat = 'summary', fun.y = median, aes(color = 'Median')) +
-  scale_color_manual(values = c('Mean' = 'red', 'Median' = 'blue')) +
-  labs(color = 'Lines')
-  
+  ggtitle('Scatter plot of Quality with chlorides')
 ```
 
 **Quality at its best when the chlorides is between 0.05 and  0.1, also I can \
 see that with the decrese of chlorides on average the quality goes up**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, total.sulfur.dioxide_quality}
-ggplot(data = red, aes(y = total.sulfur.dioxide,
-                       x= as.integer(as.vector(quality)))) +
-  geom_point(alpha = .5, position = 'jitter') +
-  scale_y_continuous(breaks = seq(0,quantile(red$total.sulfur.dioxide,0.99),5))+
-  scale_x_continuous(breaks = seq(3,
-                              quantile(with(red,as.integer(as.vector(quality)))
-                                           ,0.99))) +
-  coord_cartesian(ylim = c(min(red$total.sulfur.dioxide),
-                           quantile(red$total.sulfur.dioxide,0.99)),
-                  xlim = c(3,
-                           quantile(with(red,as.integer(as.vector(quality)))
-                                    ,0.99))) +
-  xlab('Quality') +
-  geom_line(fun.y = mean, stat = 'summary')
+#Scatter plot of Quality with total sulfur dioxide
+bi_fun(red, 'quality','total.sulfur.dioxide','quality (0-10)',
+       'total sulfur dioxide (mg / dm^3)', 0.5) +
+  ggtitle('Scatter plot of Quality with total sulfur dioxide')
+  
 ```
 
 **lower Total sulfur dioxide (TSD) is a contributor to better quality, however \ 
@@ -376,80 +389,36 @@ correlated variable another point to be considered is that there is not enough \
 samples with quality level 3, 4, 8**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, free.sulfur.dioxide_quality}
-ggplot(data = red, aes(y = free.sulfur.dioxide,
-                       x= as.integer(as.vector(quality)))) +
-  geom_point(alpha = .3, position = 'jitter') +
-  scale_y_continuous(breaks = seq(0,quantile(red$free.sulfur.dioxide,0.99),5))+
-  scale_x_continuous(breaks = seq(3,
-                              quantile(with(red,as.integer(as.vector(quality)))
-                                           ,0.99))) +
-  coord_cartesian(ylim = c(min(red$free.sulfur.dioxide),
-                           quantile(red$free.sulfur.dioxide,0.99)),
-                  xlim = c(3,
-                           quantile(with(red,as.integer(as.vector(quality)))
-                                    ,0.99))) +
-  xlab('Quality')
+# Scatter plot of free.sulfur.dioxide with quality
+bi_fun(red, 'quality','free.sulfur.dioxide','quality (0-10)',
+       'free sulfur dioxide (mg / dm^3)',0.3) +
+  ggtitle('Scatter plot of quality with free.sulfur.dioxide')
+
 ```
 
 **From the first look and due the not enough samples of quality level 7 and 8 \
 it seems that this variable isn't contributing much to quality**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, sulphates_quality}
-ggplot(data = red, aes(y = sulphates, x= as.integer(as.vector(quality)))) +
-  geom_point(alpha = .3, position = 'jitter') +
-  scale_y_continuous(breaks = seq(0,quantile(red$sulphates,0.99),0.1))+
-  scale_x_continuous(breaks = seq(3,
-                              quantile(with(red,as.integer(as.vector(quality)))
-                                           ,0.99))) +
-  coord_cartesian(ylim = c(min(red$sulphates),
-                           quantile(red$sulphates,0.99)),
-                  xlim = c(3,
-                           quantile(with(red,as.integer(as.vector(quality)))
-                                    ,0.99))) +
-  xlab('Quality') +
-  geom_line(stat = 'summary', fun.y = median, color = 'red') +
-  geom_line(stat = 'summary', fun.y = mean, color = 'blue')
+# Scatter plot with mean & median line of quality vs sulphates
+bi_fun(red, 'quality','sulphates','quality (0-10)',
+       'sulphates (potassium sulphate - g / dm3)', 0.3)
 ```
 
 **Sulphates & Quality: drawing the mean and median layers showed that the \ 
 increase of sulphates contributes to better quality.**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, density_quality}
-ggplot(data = red, aes(y = density, x= as.integer(as.vector(quality)))) +
-  geom_point(alpha = .2, position = 'jitter') +
-  scale_y_continuous(breaks = seq(0,quantile(red$density,0.99),0.001))+
-  scale_x_continuous(breaks = seq(3,
-                              quantile(with(red,as.integer(as.vector(quality)))
-                                           ,0.99))) +
-  coord_cartesian(ylim = c(min(red$density),
-                           quantile(red$density,0.99)),
-                  xlim = c(3,
-                           quantile(with(red,as.integer(as.vector(quality)))
-                                    ,0.99))) +
-  xlab('Quality') +
-  geom_line(stat = 'summary', fun.y = median, color = 'red') +
-  geom_line(stat = 'summary', fun.y = mean, color = 'blue')
+# Scatter plot of quality vs density with mean and median lines
+bi_fun(red,'quality','density','quality (0-10)','density (g / cm^3)', 0.2)
 ```
 
-**This Analysis Didn't help much as I see most of the data is between 0.995 and \
-0.998 of density**
+**I can see that with the decrese of the density the quality improves, this is \
+clear when we look at the median and mean lines**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, alcohol_quality}
-ggplot(data = red, aes(y = alcohol, x= as.integer(as.vector(quality)))) +
-  geom_point(alpha = .06, position = 'jitter') +
-  scale_y_continuous(breaks = seq(0,quantile(red$alcohol,0.99),0.5))+
-  scale_x_continuous(breaks = seq(3,
-                              quantile(with(red,as.integer(as.vector(quality)))
-                                           ,0.99))) +
-  coord_cartesian(ylim = c(min(red$alcohol),
-                           quantile(red$alcohol,0.99)),
-                  xlim = c(3,
-                           quantile(with(red,as.integer(as.vector(quality)))
-                                    ,0.99))) +
-  xlab('Quality')+
-  geom_line(stat = 'summary', fun.y = median, color = 'red') +
-  geom_line(stat = 'summary', fun.y = mean, color = 'blue')
-  
+# scatter plot of alcohol and quality with median and mean lines
+bi_fun(red,'quality','alcohol','quality (0-10)', 'alcohol (% by volume)', 0.3)
 ```
 
 **Alcohol does affect the quality as per the plot, as I see a trend with the \ 
@@ -457,32 +426,25 @@ increase of the alcohol**
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, sulphates_alcohol}
-ggplot(data = red, aes(x = sulphates, y= alcohol)) +
-  geom_point(aes(color = 'orange'), alpha = 1/5, position = 'jitter') +
-  scale_x_continuous(breaks = seq(0,max(red$sulphates),.1))+
-  scale_y_continuous(breaks = seq(0,max(red$alcohol),.5)) +
-  coord_cartesian(xlim = c(min(red$sulphates),
-                           quantile(red$sulphates,0.99)),
-                  ylim = c(min(red$alcohol),
-                           quantile(red$alcohol,0.99))) +
-  geom_smooth()
+# scatter plot of sulphates and alcohol with smoother (liner model)
+bi_fun(red,'sulphates','alcohol','sulphates (potassium sulphate - g / dm3)',
+       'alcohol (% by volume)',0.2) +
+  geom_smooth(method = lm)
 ```
 
-**It seems that there is a relation between the sulphates and alcohol, increase \
+**It seems that there is a relation between the sulphates and alcohol, increase\
 of alcohol there is an increase of sulphates however with sulphates value of \
 ~0.8 the relationship changes, I assume the 0.7 and 0.8 are the optimal values**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, sulphates_free.sulfur.dioxide}
-ggplot(data = red, aes(x = sulphates, y= free.sulfur.dioxide)) +
-  geom_point(aes(color = 'orange'), alpha = 1/5, position = 'jitter') +
-  scale_x_continuous(breaks = seq(0,max(red$sulphates),.1))+
-  scale_y_continuous(breaks = seq(0,max(red$free.sulfur.dioxide),2)) +
-  coord_cartesian(xlim = c(min(red$sulphates),
-                           quantile(red$sulphates,0.99)),
-                  ylim = c(min(red$free.sulfur.dioxide),
-                           quantile(red$free.sulfur.dioxide,0.99))) +
+# scatter plot of sulphates and free.sulfur.dioxide with smoother
+bi_fun(red,'sulphates','free.sulfur.dioxide',
+       'sulphates (potassium sulphate - g / dm3)',
+       'free sulfur dioxide (mg / dm^3)',0.2) +
   geom_smooth()
 ```
+
+**there is no liner relation between sulphates and free.sulfur.dioxide**
 
 # Bivariate Analysis
 
@@ -500,7 +462,7 @@ volatile.acidity the quality increases**
 
 **Alcohol & density: I can see a -ve correlation between these 2 features, \
 I will these against quality to see how do they contribute to it.**
- **Quality & density: at a first look on the scatter I couldn't find a relation \
+**Quality & density: at a first look on the scatter I couldn't find a relation \
 but after adding 2 geom_line of median and mean , I can tell that on average \
 lower density can mean a better quality.**
 
@@ -518,7 +480,8 @@ variables**
  
 **Chlorides & Quality: I don't see a relation between these 2.**
  
-**Free.sulfur.dioxide & sulphates: there is no direct relation seen in the graph**
+**Free.sulfur.dioxide & sulphates: there is no direct relation seen in the \
+graph**
 
 ### What was the strongest relationship you found?
 
