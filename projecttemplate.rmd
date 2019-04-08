@@ -19,6 +19,7 @@ library(tidyr)
 library(gridExtra)
 library(dplyr)
 library(GGally)
+library(corrplot)
 ```
 
 ```{r}
@@ -488,12 +489,30 @@ graph**
 
 # Multivariate Plots Section
 
+### Correlation
+
+```{r}
+#Correlation between all features using corrplot
+red$quality <- as.integer(as.vector(red$quality))
+co <- cor(select(red, -X))
+corrplot(co, type = 'full',method = 'circle')
+```
+**There is a significant correlation between the following: \
+- citric acid & fixed acidity (Strong positive).
+- citric acid & voatile acidity (Modirate negative).
+- density & fixed acidity (Strong positive).
+- pH & fixed acidity (Strong negative).
+- pH & citric acid (Modirate Negative).
+- Density & Alcohol (Modirate Negative).
+- Quality & Alcohol (Modirate Positive).**
+
+
 ```{r, multi_function}
 #create a function to reduce redunduncy 
-#This function takes 6 parameters to dynamically plot:
-# dataset (dataframe), x (x - axis), y (y-axis), xlabel, ylabel,
-# alpha for scatter plot with a default value of 1
-bi_fun <- function(dataset, x , y, xlabel, ylabel, alpha = 1) {
+#This function takes 5 parameters to dynamically plot:
+# dataset (dataframe), x (x - axis), y (y-axis), xlabel, ylabel
+
+multi_fun <- function(dataset, x , y, xlabel, ylabel) {
     #setting len_out to 8 to be default for non factor variables
     # len_out <- 8
     #defining df, df$c and df$y to avoid the ggplot issue if assiging the 
@@ -515,11 +534,11 @@ bi_fun <- function(dataset, x , y, xlabel, ylabel, alpha = 1) {
                 coord_cartesian( xlim = c(min(df$x), quantile(df$x,0.99)),
                                 ylim = c(min(df$y), quantile(df$y,0.99))) +
                 xlab(xlabel) +
-                ylab(ylabel) + 
-                geom_line(stat = 'summary', fun.y = mean, aes(color = 'Mean')) +
-                geom_line(stat = 'summary', fun.y = median, aes(color = 'Median')) +
-                scale_color_manual(values = c('Mean' = 'red', 'Median' = 'blue')) +
-                labs(color = 'Lines')
+                ylab(ylabel)  
+                # geom_line(stat = 'summary', fun.y = mean, aes(color = 'Mean')) +
+                # geom_line(stat = 'summary', fun.y = median, aes(color = 'Median')) +
+                # scale_color_manual(values = c('Mean' = 'red', 'Median' = 'blue')) +
+                # labs(color = 'Lines')
     } else if (class(df$y)[1] == "ordered" | class(df$y)[1] == "factor") {
         df$y <- as.integer(as.vector(df$y))
         # len_out <- 6
@@ -532,14 +551,13 @@ bi_fun <- function(dataset, x , y, xlabel, ylabel, alpha = 1) {
                 coord_cartesian( xlim = c(min(df$x), quantile(df$x,0.99)),
                                 ylim = c(min(df$y), quantile(df$y,0.99))) +
                 xlab(xlabel) +
-                ylab(ylabel) + 
-                geom_line(stat = 'summary', fun.y = mean, aes(color = 'Mean')) +
-                geom_line(stat = 'summary', fun.y = median, aes(color = 'Median')) +
-                scale_color_manual(values = c('Mean' = 'red', 'Median' = 'blue')) +
-                labs(color = 'Lines')
+                ylab(ylabel) 
+                # geom_line(stat = 'summary', fun.y = mean, aes(color = 'Mean')) +
+                # geom_line(stat = 'summary', fun.y = median, aes(color = 'Median')) +
+                # scale_color_manual(values = c('Mean' = 'red', 'Median' = 'blue')) +
+                # labs(color = 'Lines')
     } else 
        p <-    ggplot(data = df, aes(x = df$x, y= df$y))+
-                geom_point(alpha = alpha, position = 'jitter') +
                 # scale_x_continuous(breaks = seq(min(df$x), quantile(df$x,0.99),
                 #                                 length.out = len_out)) +
                 # scale_y_continuous(breaks = seq(min(df$y), quantile(df$y,0.99), 
@@ -550,21 +568,12 @@ bi_fun <- function(dataset, x , y, xlabel, ylabel, alpha = 1) {
                 ylab(ylabel)
   return(p)
 }
-
-
-
 ```
 
 
 ```{r alcohol_density_quality, echo=FALSE, message=FALSE, warning=FALSE}
-ggplot(data = red, aes(x = alcohol, y= density)) +
+multi_fun(red,'alcohol','density','alcohol (% by volume)','density (g / cm^3)')+
   geom_point(alpha = 0.5, position = 'jitter') +
-  scale_x_continuous(breaks = seq(0,max(red$alcohol),.5))+
-  scale_y_continuous(breaks = seq(0,max(red$density),0.005)) +
-  coord_cartesian(xlim = c(min(red$alcohol),
-                           quantile(red$alcohol,0.99)),
-                  ylim = c(min(red$density),
-                           quantile(red$density,0.99))) +
   facet_wrap(~quality) +
   geom_smooth()
 ```
@@ -789,3 +798,10 @@ wine, but in the end I found some interesting findings of some features like \
 sulphates, and I was successful in assiging some main features in the begining \
 of my analysis. In the end it was a good analysis, I will look into a bigger \
 dataset with data more distributed accross different level of qualites**
+
+
+
+
+# Refereaances: 
+
+https://stackoverflow.com/questions/11330138/find-columns-with-all-missing-values
