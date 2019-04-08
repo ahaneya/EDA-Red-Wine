@@ -23,7 +23,7 @@ library(corrplot)
 ```
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
-#Disabling all messages, wornings and echo
+#Disabling all messages, warnings and echo
 knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
 ```
 
@@ -45,25 +45,32 @@ red <- select(red, -X)
 str(red)
 ```
 
+**Exploring the dataset structure**
+
 
 ```{r echo=FALSE, dim}
 # Dataset dimensions
 dim(red)
 ```
 
+**finding the dataset dimensions**
 
 ```{r echo=FALSE, summary}
 # dataset 5 number summary
 summary(red)
 ```
 
+**a statistical summary of the dataset variables**
+
 ```{r echo=FALSE, nulls_check}
 # nulls check
 sum(is.na(red))
 ```
 
+**Checking if there are nulls**
+
 ```{r function_univariate}
-# Function to avoid redunduncy
+# Function to avoid redundancy
 
 uni_fun <- function(dataset, feature, title, xlabel = NULL,
                     ylabel = 'Count', binwidth = NULL) {
@@ -79,7 +86,7 @@ uni_fun <- function(dataset, feature, title, xlabel = NULL,
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, quality_plot}
 # using ggplot2 library
-uni_fun(red, 'quality', 'Histogram of wine qualities distrubition', 
+uni_fun(red, 'quality', 'Histogram of wine qualities distribution', 
         'Quality (0-10)', 'Count')
 ```
 
@@ -88,7 +95,7 @@ low can be considered as outliers or not enough samples**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, density}
 #Histogram of density
-uni_fun(red, 'density', 'Histogram of wine densities distrubition',
+uni_fun(red, 'density', 'Histogram of wine densities distribution',
         'Density (g / cm^3)', 'Count')
 ```
 
@@ -96,7 +103,7 @@ uni_fun(red, 'density', 'Histogram of wine densities distrubition',
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, fixed.acidity}
 #histogram of fixed.acidity
-uni_fun(red, 'fixed.acidity', 'Histogram of wine fixed acidity distrubition')
+uni_fun(red, 'fixed.acidity', 'Histogram of wine fixed acidity distribution')
 ```
 
 **Most of the fixed acidity data is between 6 and 10 and the plot is right \
@@ -104,7 +111,7 @@ skewed**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE,fixed.acidity_plot2}
 #fixed.acidity with a smaller binwidth and a bit of zooming
-uni_fun(red, 'fixed.acidity', 'Histogram of wine fixed acidity distrubition',
+uni_fun(red, 'fixed.acidity', 'Histogram of wine fixed acidity distribution',
         'fixed acidity (tartaric acid - g / dm^3)' , 'Count' ,0.1) +
   scale_x_continuous(breaks = seq(4,12,1), limits = c(4.5,13))
 ```
@@ -113,13 +120,13 @@ uni_fun(red, 'fixed.acidity', 'Histogram of wine fixed acidity distrubition',
 skewed the second plot shows the variation of the data points after using the \ 
 binwidth and scale_x_continous, for the second plot after zooming in using \
 limits assuming that the points from 13 to 17 are outliers, we can see fixed \
-acidity is almost normally distribited**
+acidity is almost normally distributed**
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, volatile.acidity}
 #Histogram of volatile.acidity
 uni_fun(red, 'volatile.acidity', 
-        'Histogram of wine Volatile Acidity distrubition',
+        'Histogram of wine Volatile Acidity distribution',
         'volatile acidity (acetic acid - g / dm^3)','Count')
 ```
 
@@ -129,7 +136,7 @@ uni_fun(red, 'volatile.acidity',
 ```{r echo=FALSE, message=FALSE, warning=FALSE, volatile.acidity_plot}
 #Histogram of volatile.acidity with a smaller binwidth
 uni_fun(red, 'volatile.acidity', 
-        'Histogram of wine Volatile Acidity distrubition',
+        'Histogram of wine Volatile Acidity distribution',
         'volatile acidity (acetic acid - g / dm^3)','Count', 0.01) +
   scale_x_continuous(breaks = seq(0,1.6,0.1))
 ```
@@ -140,7 +147,7 @@ uni_fun(red, 'volatile.acidity',
 ```{r echo=FALSE, message=FALSE, warning=FALSE, citric.acid}
 #Histogram of citric acid
 uni_fun(red, 'citric.acid', 
-        'Histogram of wine Citric Acid distrubition',
+        'Histogram of wine Citric Acid distribution',
         'citric acid (g / dm^3)','Count') 
 ```
 
@@ -149,19 +156,19 @@ uni_fun(red, 'citric.acid',
 ```{r echo=FALSE, message=FALSE, warning=FALSE, citric.acid_plot}
 #Histogram of citric acid with smaller binwidth and with zooming
 uni_fun(red, 'citric.acid', 
-        'Histogram of wine Citric Acid distrubition',
+        'Histogram of wine Citric Acid distribution',
         'citric acid (g / dm^3)','Count',0.01) +
   coord_cartesian(xlim = c(0,0.8)) +
   scale_x_continuous(breaks = seq(0,0.8,0.1))
 ```
 
 **Citric acid at 0.0 has the highest count next to it 0.50, by setting the \
-binwidth to 0.01 and zooing in to take out the outliers we have a clear view \
+binwidth to 0.01 and zooming in to take out the outliers we have a clear view \
 over the data distribution**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, residual.sugar}
 #histogram of residual sugar
-uni_fun(red, 'residual.sugar', 'Histogram of wine Residual Sugar distrubition',
+uni_fun(red, 'residual.sugar', 'Histogram of wine Residual Sugar distribution',
         'residual sugar (g / dm^3)')
 ```
 
@@ -170,7 +177,7 @@ uni_fun(red, 'residual.sugar', 'Histogram of wine Residual Sugar distrubition',
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, residual.sugar_plot}
 #histogram of residual sugar with a smaller binwidth
-uni_fun(red, 'residual.sugar', 'Histogram of wine Residual Sugar distrubition',
+uni_fun(red, 'residual.sugar', 'Histogram of wine Residual Sugar distribution',
         'residual sugar (g / dm^3)',,0.1) +
 coord_cartesian(xlim = c(0.6,8.1)) + 
 scale_x_continuous(breaks = seq(0.6,8.1,1))
@@ -183,7 +190,7 @@ observations**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, chlorides}
 #HIstogram of Chlorides
-uni_fun(red, 'chlorides', 'Histogram of wine Chlorides distrubition',
+uni_fun(red, 'chlorides', 'Histogram of wine Chlorides distribution',
         'chlorides (sodium chloride - g / dm^3)')
 ```
 
@@ -191,17 +198,17 @@ uni_fun(red, 'chlorides', 'Histogram of wine Chlorides distrubition',
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, free.sulfur.dioxide}
 uni_fun(red, 'free.sulfur.dioxide',
-        'Histogram of wine Free Sulfur Dioxide distrubition',
+        'Histogram of wine Free Sulfur Dioxide distribution',
         'free sulfur dioxide (mg / dm^3)')
 ```
 
 **Right skewed plot with lower values having more count and probably any \
- thing more than 40 could be an outlier**
+ thing more than 40 could be an outliers**
  
 ```{r echo=FALSE, message=FALSE, warning=FALSE, total.sulfur.dioxide}
 #Total Sulfur dioxide histogram with log10 transformation
 uni_fun(red, 'total.sulfur.dioxide',
-'Histogram of wine Total Sulfur Dioxide distrubition',
+'Histogram of wine Total Sulfur Dioxide distribution',
 'total sulfur dioxide (mg / dm^3)') 
 ``` 
 
@@ -209,14 +216,14 @@ uni_fun(red, 'total.sulfur.dioxide',
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, pH_plot}
 #Histogram of the pH
-uni_fun(red,'pH','Histogram of wine pH distrubition', 'pH', 'Count' ,0.01)
+uni_fun(red,'pH','Histogram of wine pH distribution', 'pH', 'Count' ,0.01)
 ``` 
 
-**pH is nomrmally distributied**
+**pH is normally distributed**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, sulphates_plot}
 #Histogram of sulphates
-uni_fun(red,'sulphates','Histogram of wine Sulphate distrubition', 
+uni_fun(red,'sulphates','Histogram of wine Sulphate distribution', 
         'sulphates (potassium sulphate - g / dm3)','Count',0.01)
 ``` 
 
@@ -235,14 +242,14 @@ uni_fun(red, 'alcohol', 'Histogram of wine Alcohol distribution',
 
 - 12 variable (feature) with one outcome (quality).
 - 1599 Observations.
-- Quality is a catagorical variable ordered from 0-10 where 0 is very bad and \ 
+- Quality is a categorical variable ordered from 0-10 where 0 is very bad and \
 10 very excellent and needs to be converted into ordered factor.
-- There other 11 variables are numrics (float).
+- There other 11 variables are numerics (float).
 
 ### What is/are the main feature(s) of interest in your dataset?
 - Residual.sugar
 - Alcohol
-- Volitile.acidity
+- Volatile.acidity
 - Citric.acid
 - Quality
 I will keep investigating to see a relevant other main feature in the dataset
@@ -258,10 +265,11 @@ investigation into your feature(s) of interest?
 **No**
 
 ### Of the features you investigated, were there any unusual distributions? \
-**Did you perform any operations on the data to tidy, adjust, or change the form \
+Did you perform any operations on the data to tidy, adjust, or change the form \
 of the data? If so, why did you do this?
-No, data is tidy from, and data quality is good, I just a changed data type \ 
-of quality to become ordered factor and removed X variable as its not needed**
+
+No, data is tidy from, and data quality is good, I just a changed data type \
+of quality to become ordered factor and removed X variable as its not needed
 
 
 # Bivariate Plots Section
@@ -273,7 +281,7 @@ red$quality <- as.ordered(red$quality)
 ```
 
 ```{r}
-#create a function to reduce redunduncy 
+#create a function to reduce redundancy 
 #This function takes 6 parameters to dynamically plot:
 # dataset (dataframe), x (x - axis), y (y-axis), xlabel, ylabel,
 # alpha for scatter plot with a default value of 1
@@ -286,7 +294,7 @@ bi_fun <- function(dataset, x , y, xlabel, ylabel, alpha = 1) {
     df <- dataset
     df$x = df[,which(names(df)==x)]
     df$y = df[,which(names(df)==y)]
-    # converting order factor to integer for ploting
+    # converting order factor to integer for plotting
     if (class(df$x)[1] == "ordered" | class(df$x)[1] == "factor") {
         df$x <- as.integer(as.vector(df$x))
         # len_out <- 6
@@ -364,7 +372,7 @@ bi_fun(red, 'quality','volatile.acidity', 'Quality (0-10)',
   ggtitle('Scatter plot of Quality with Volatile.acidity') 
 ```
 
-**It seems with decrese of the volatile.acidity the quality increases on average**
+**It seems with decrease of the volatile.acidity the quality increases on average**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, chlorides_quality}
 # Scatter plot of Quality with chlorides
@@ -374,7 +382,7 @@ bi_fun(red, 'quality','chlorides', 'Quality (0-10)',
 ```
 
 **Quality at its best when the chlorides is between 0.05 and  0.1, also I can \
-see that with the decrese of chlorides on average the quality goes up**
+see that with the decrease of chlorides on average the quality goes up**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, total.sulfur.dioxide_quality}
 #Scatter plot of Quality with total sulfur dioxide
@@ -384,8 +392,8 @@ bi_fun(red, 'quality','total.sulfur.dioxide','quality (0-10)',
   
 ```
 
-**lower Total sulfur dioxide (TSD) is a contributor to better quality, however \ 
-I see a lower TSD with a lower  quality rating, this could be related to \ 
+**lower Total sulfur dioxide (TSD) is a contributor to better quality, however \
+I see a lower TSD with a lower  quality rating, this could be related to \
 correlated variable another point to be considered is that there is not enough \
 samples with quality level 3, 4, 8**
 
@@ -414,7 +422,7 @@ increase of sulphates contributes to better quality.**
 bi_fun(red,'quality','density','quality (0-10)','density (g / cm^3)', 0.2)
 ```
 
-**I can see that with the decrese of the density the quality improves, this is \
+**I can see that with the decrease of the density the quality improves, this is \
 clear when we look at the median and mean lines**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, alcohol_quality}
@@ -462,7 +470,7 @@ volatile.acidity the quality increases**
 **Alcohol & quality: the increase of alcohol indeed increases the quality** 
 
 **Alcohol & density: I can see a -ve correlation between these 2 features, \
-I will these against quality to see how do they contribute to it.**
+I will check these against quality to see how do they contribute to it.** \
 **Quality & density: at a first look on the scatter I couldn't find a relation \
 but after adding 2 geom_line of median and mean , I can tell that on average \
 lower density can mean a better quality.**
@@ -488,7 +496,7 @@ graph**
 
 - Alcohol & quality
 - Alcohol & density
-- Suphates & quality
+- Sulphates & quality
 
 # Multivariate Plots Section
 
@@ -505,31 +513,31 @@ red$quality <- as.ordered(red$quality)
 ```
 
 **There is a significant correlation between the following: \
-- citric acid & fixed acidity (Strong positive).
-- citric acid & voatile acidity (Modirate negative).
-- density & fixed acidity (Strong positive).
-- Total sulfur dioxide & free sulfur dioxide (Strong positive).
-- pH & fixed acidity (Strong negative).
-- pH & citric acid (Modirate Negative).
-- Density & Alcohol (Modirate Negative).
-- Quality & Alcohol (Modirate Positive).**
+- citric acid & fixed acidity (Strong positive).\
+- citric acid & volatile acidity (Moderate negative).\
+- density & fixed acidity (Strong positive).\
+- Total sulfur dioxide & free sulfur dioxide (Strong positive).\
+- pH & fixed acidity (Strong negative).\
+- pH & citric acid (Moderate Negative).\
+- Density & Alcohol (Moderate Negative).\
+- Quality & Alcohol (Moderate Positive).**\
 
 
 ```{r, multi_function}
-#create a function to reduce redunduncy 
+#create a function to reduce redundancy 
 #This function takes 5 parameters to dynamically plot:
 # dataset (dataframe), x (x - axis), y (y-axis), xlabel, ylabel
 
 multi_fun <- function(dataset, x , y, xlabel, ylabel) {
     #setting len_out to 8 to be default for non factor variables
     # len_out <- 8
-    #defining df, df$c and df$y to avoid the ggplot issue if assiging the 
+    #defining df, df$c and df$y to avoid the ggplot issue if assigning the 
     #variables
     p <- NULL
     df <- dataset
     df$x = df[,which(names(df)==x)]
     df$y = df[,which(names(df)==y)]
-    # converting order factor to integer for ploting
+    # converting order factor to integer for plotting
     if (class(df$x)[1] == "ordered" | class(df$x)[1] == "factor") {
         df$x <- as.integer(as.vector(df$x))
         # len_out <- 6
@@ -588,11 +596,11 @@ multi_fun(red,'alcohol','density','alcohol (% by volume)','density (g / cm^3)')+
 ```
 
 **I can see a the relation between the density and alcohol with quality, lower \
-density higher alcohol on avergae will result a better quality**
+density higher alcohol on average will result a better quality**
 
 ```{r echo=FALSE, echo=FALSE, message=FALSE, warning=FALSE}
 # I have noticed a strong +ve correlation between fixed acidity and citric acid
-# so here I am ploting these 2 against quality to see if they contribuite to it
+# so here I am plotting these 2 against quality to see if they contribute to it
 ggplot(data = red, aes(x = fixed.acidity, y = citric.acid)) +
   geom_point(position = 'jitter', alpha = 0.2)+
   facet_wrap(~quality, scales = 'free') +
@@ -602,13 +610,13 @@ ggplot(data = red, aes(x = fixed.acidity, y = citric.acid)) +
   geom_smooth(method=lm)
 ```
 
-**With the strong positive correlation beteweem fixed acidity and citric acid \
+**With the strong positive correlation between fixed acidity and citric acid \
 i see the quality gets better on average of the increase of both features**
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 # I have noticed a strong +ve correlation between fixed acidity and density
-# so here I am ploting these 2 against quality to see if they contribuite to it
+# so here I am plotting these 2 against quality to see if they contribute to it
 ggplot(data = red, aes(x = fixed.acidity, y = density)) +
   geom_point(position = 'jitter', alpha = 0.2)+
   facet_wrap(~quality, scales = 'free') +
@@ -618,7 +626,7 @@ ggplot(data = red, aes(x = fixed.acidity, y = density)) +
   geom_smooth()
 ```
 
-**Eventhough there is a strong correlation between fixed acidity and density \
+**Even though there is a strong correlation between fixed acidity and density \
 I see that there isn't much of relation between these 2 features and the \
 quality as on average these 2 features are the same on most of quality levels**
 
@@ -661,9 +669,9 @@ ggplot(data = groupped_quality.means, aes(x = as.integer(as.vector(quality)))) +
           volatile.acidity with quality')
 ```
 
-**This is a useful graph it showed me wha features affects the quality on \
-average as above increasing alcohol is a strong contirbutor, also increasing \
-citric acid plays a role into the quality while descreasing volatile acidity \
+**This is a useful graph it showed me what features affects the quality on \
+average as above increasing alcohol is a strong contributor, also increasing \
+citric acid plays a role into the quality while decreasing volatile acidity \
 on the other hand, residual sugar and density alone they don't have a direct \
 relation with quality**
 
@@ -680,11 +688,11 @@ ggplot(data = red, aes(x = as.integer(as.vector(quality)), y = alcohol)) +
 ```
 
 **As per the above plot, I see that for pH values 3.25-3.5 and 3.5-4.01 \
-and higher percentage of alcohol contirbuites to higher levels of quality**
+and higher percentage of alcohol contributes to higher levels of quality**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, cutting_tsd}
 ## cutting a total.sulfur.dioxide to 8 slices and plot it against alcohol,
-##  desnity, total sulfur dioxide and quality
+##  density, total sulfur dioxide and quality
  red$tsd.bucket <- cut(red$total.sulfur.dioxide, c(0,20,40,60,80,100,150,250,289))
 
 ggplot(data =red, aes( x = alcohol, y = density, color = tsd.bucket)) +
@@ -698,13 +706,13 @@ ggplot(data =red, aes( x = alcohol, y = density, color = tsd.bucket)) +
 
 **following on my previous findings on total sulfur dioxide, in the above plot \
 I can see buckets (20,40] and (40,60] also the relatively lower density and \
-higher alcohol contributies to better quality**
+higher alcohol contributes to better quality**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE,alcohol_density_c_quality}
 # convert quality to integer to have the gradient color
 red$quality <- as.integer(as.vector(red$quality))
 
-# ploting alcohol, density colored by quality
+# plotting alcohol, density colored by quality
 multi_fun(red,'alcohol','density','alcohol (% by volume)','density (g / cm^3)')+
   geom_point(aes(color = quality), alpha = 0.5, position = 'jitter') +
   scale_color_discrete(guide = guide_legend(reverse=TRUE)) +
@@ -722,7 +730,7 @@ wine**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, densit_alcohol_quality_rs.bucket}
 
-# Cutting residual.sugar to 5 buckets and plot it againts quality, alcohol and 
+# Cutting residual.sugar to 5 buckets and plot it against quality, alcohol and 
 # density
 red$residual.sugar.bucket <- cut(red$residual.sugar,c(0.9,1.9,2.2,2.6,4,15.5))
 
@@ -742,7 +750,7 @@ multi_fun(subset(red, !is.na(residual.sugar.bucket)),'alcohol','density',
 red$quality <- as.ordered(red$quality)
 ```
 
-**Resudual.sugar doesn't have an influance on the quality, as in the plot**
+**Residual.sugar doesn't have an influence on the quality, as in the plot**
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, alcohol_sulphates_quality}
@@ -764,7 +772,7 @@ red$quality <- as.ordered(red$quality)
 
 **I can see in the plot alcohol with sulphates faceted total.sulfur.dioxide \
 colored by quality, in addition to total.sulfur.dioxide and alcohol positive \
-relation with quality increase of sulphates also contribuites to better \
+relation with quality increase of sulphates also contributes to better \
 quality**
 
 # Multivariate Analysis
@@ -773,8 +781,8 @@ quality**
 investigation. Were there features that strengthened each other in terms of \
 looking at your feature(s) of interest?
 
-**Adding more features againt each other allowed to explore relation between \
-features of interest and againt the outcome variable, which allowed me to \
+**Adding more features against each other allowed to explore relation between \
+features of interest and against the outcome variable, which allowed me to \
 conclude what feature has the most effect and what is the optimum value for \
 each**
 
@@ -815,10 +823,10 @@ red$quality <- as.ordered(red$quality)
 ### Description One
 
 **This plot shows 4 features relations and how do they contribute to the \
-quality here is and explaination of the plot: \
+quality here is and explanation of the plot: \
 I can see in the plot alcohol with sulphates faceted total.sulfur.dioxide \
 colored by quality, in addition to total.sulfur.dioxide and alcohol positive \
-relation with quality increase of sulphates also contribuites to better \
+relation with quality increase of sulphates also contributes to better \
 quality**
 
 ### Plot Two
@@ -850,7 +858,7 @@ ggplot(data = groupped_quality.means, aes(x = as.integer(as.vector(quality)))) +
 ### Description Two
 
 **This is an excellent plot that shows on average what contributes directly to \
-qualtiy which is in this case alcohol, volatile acidity, citric acid**
+quality which is in this case alcohol, volatile acidity, citric acid**
 
 ### Plot Three
 
@@ -867,58 +875,58 @@ red$quality <- as.ordered(red$quality)
 ### Description Three
 
 **This plot gives an idea on what to work on right away, its a starting point \
-especially for the multivarite analysis, this plot show the strong, weak and \
-modirate correlation between variables, as a second step in the analysis, \
-I would use 2 correlated features to add one or 2 more to enchance the \
+especially for the multivariate analysis, this plot show the strong, weak and \
+moderate correlation between variables, as a second step in the analysis, \
+I would use 2 correlated features to add one or 2 more to enhance the \
 analysis**
 
 
 
 # Reflection
 
-**This EDA included a feature exploration of one feature at the begining \
-to see how can I use them then I used bivariate analysis and ploting to further\
+This EDA included a feature exploration of one feature at the beginning \
+to see how can I use them then I used bivariate analysis and plotting to further\
 see the relation between most of the features in that analysis I noticed \
-several feature that are correlated either positivly or negativly some of the \
+several feature that are correlated either positively or negatively some of the \
 features: \
-- Alcohol and density.
-- Quality and alcolol.
-- Sulphates and quality.
-- volatile acidity and quality.
+ - Alcohol and density.\
+ - Quality and alcohol.\
+ - Sulphates and quality.\
+ - volatile acidity and quality.\
 
-This bivariate analysis allowed me to foucs on these features as starting \
+This bivariate analysis allowed me to focus on these features as starting \
 point, and exploring a couple more with them.
 
-For the multivariate anlaysis I focused on Alcohol, quality and density as \
+For the multivariate analysis I focused on Alcohol, quality and density as \
 main features then added the following features and even created some:\
-- Sulphates
-- pH
+ - Sulphates.\
+ - pH.\
 
 Newly cerated factors to help derive the relation: \
-- Total sulfur dioxide bucket of 8 levels.
-- pH bucket of 4 levels.
-- residual sugar of 5 levels.
+ - Total sulfur dioxide bucket of 8 levels.\
+ - pH bucket of 4 levels.\
+ - residual sugar of 5 levels.\
 
 as conclusion I found out that pH and Total sulfur dioxide, sulphates, alcohol \
-and density are the main contributors to the red wine quality.**
+and density are the main contributors to the red wine quality.
 
-#####Limitiation:
+#####Limitation:
 
-**One of the struggles that I had to deal with is the dataset limitation, \
-redwine quality set doesn't have a well distrubtied smaples most of the \
+One of the struggles that I had to deal with is the dataset limitation, \
+red wine quality set doesn't have a well distributed samples most of the \
 samples are of quality level 5 and 6, where there are no samples of level 1 \
 ,2, 9 and 10, and the samples on level 3, 4, 7 and 8 are very small in count \
 thus, having more well balanced dataset with more samples.\
 
 lastly, with more data, and time to explore more relation or maybe making \
 more buckets can lead to more findings.\
-Another thing I was thinking about is to analyse the whit wine dataset to see \
-if there are any similarites between these 2 dataset, that might lead to a new \
+Another thing I was thinking about is to analyses the whit wine dataset to see \
+if there are any similarities between these 2 dataset, that might lead to a new \
 findings.
 
 
 
-# Refereaances: 
+# References: 
 
 https://stackoverflow.com/questions/11330138/find-columns-with-all-missing-values
 https://stackoverflow.com/questions/5106782/use-of-ggplot-within-another-function-in-r
