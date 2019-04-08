@@ -485,22 +485,28 @@ graph**
 
 - Alcohol & quality
 - Alcohol & density
-- Density % quality
+- Suphates & quality
 
 # Multivariate Plots Section
 
 ### Correlation
 
 ```{r}
-#Correlation between all features using corrplot
+# Correlation between all features using corrplot
+# converting quality to Integer to use it in corrplot package
+red <- select(red, -X)
 red$quality <- as.integer(as.vector(red$quality))
-co <- cor(select(red, -X))
+co <- cor(red)
 corrplot(co, type = 'full',method = 'circle')
+# revert back the quality to ordered factor
+red$quality <- as.ordered(red$quality)
 ```
+
 **There is a significant correlation between the following: \
 - citric acid & fixed acidity (Strong positive).
 - citric acid & voatile acidity (Modirate negative).
 - density & fixed acidity (Strong positive).
+- Total sulfur dioxide & free sulfur dioxide (Strong positive).
 - pH & fixed acidity (Strong negative).
 - pH & citric acid (Modirate Negative).
 - Density & Alcohol (Modirate Negative).
@@ -525,77 +531,99 @@ multi_fun <- function(dataset, x , y, xlabel, ylabel) {
     if (class(df$x)[1] == "ordered" | class(df$x)[1] == "factor") {
         df$x <- as.integer(as.vector(df$x))
         # len_out <- 6
-        p <-    ggplot(data = df, aes(x = df$x, y= df$y))+
-                geom_point(alpha = alpha, position = 'jitter') +
-                # scale_x_continuous(breaks = seq(min(df$x), quantile(df$x,0.99),
-                #                                 length.out = len_out)) +
-                # scale_y_continuous(breaks = seq(min(df$y), quantile(df$y,0.99), 
-                #                                 length.out = len_out)) +
-                coord_cartesian( xlim = c(min(df$x), quantile(df$x,0.99)),
-                                ylim = c(min(df$y), quantile(df$y,0.99))) +
-                xlab(xlabel) +
-                ylab(ylabel)  
-                # geom_line(stat = 'summary', fun.y = mean, aes(color = 'Mean')) +
-                # geom_line(stat = 'summary', fun.y = median, aes(color = 'Median')) +
-                # scale_color_manual(values = c('Mean' = 'red', 'Median' = 'blue')) +
-                # labs(color = 'Lines')
+        p<-ggplot(data = df, aes(x = df$x, y= df$y))+
+           geom_point(alpha = alpha, position = 'jitter') +
+           # scale_x_continuous(breaks = seq(min(df$x), quantile(df$x,0.99),
+           #                                 length.out = len_out)) +
+           # scale_y_continuous(breaks = seq(min(df$y), quantile(df$y,0.99), 
+           #                                 length.out = len_out)) +
+           coord_cartesian( xlim = c(min(df$x), quantile(df$x,0.99)),
+                           ylim = c(min(df$y), quantile(df$y,0.99))) +
+           xlab(xlabel) +
+           ylab(ylabel)  
+           # geom_line(stat = 'summary', fun.y = mean, aes(color = 'Mean')) +
+           # geom_line(stat = 'summary', fun.y = median, aes(color = 'Median'))+
+           # scale_color_manual(values = c('Mean' = 'red', 'Median' = 'blue')) +
+           # labs(color = 'Lines')
     } else if (class(df$y)[1] == "ordered" | class(df$y)[1] == "factor") {
         df$y <- as.integer(as.vector(df$y))
         # len_out <- 6
-                p <-    ggplot(data = df, aes(x = df$x, y= df$y))+
-                geom_point(alpha = alpha, position = 'jitter') +
-                # scale_x_continuous(breaks = seq(min(df$x), quantile(df$x,0.99),
-                #                                 length.out = len_out)) +
-                # scale_y_continuous(breaks = seq(min(df$y), quantile(df$y,0.99), 
-                #                                 length.out = len_out)) +
-                coord_cartesian( xlim = c(min(df$x), quantile(df$x,0.99)),
-                                ylim = c(min(df$y), quantile(df$y,0.99))) +
-                xlab(xlabel) +
-                ylab(ylabel) 
-                # geom_line(stat = 'summary', fun.y = mean, aes(color = 'Mean')) +
-                # geom_line(stat = 'summary', fun.y = median, aes(color = 'Median')) +
-                # scale_color_manual(values = c('Mean' = 'red', 'Median' = 'blue')) +
-                # labs(color = 'Lines')
+        p<-ggplot(data = df, aes(x = df$x, y= df$y))+
+           geom_point(alpha = alpha, position = 'jitter') +
+           # scale_x_continuous(breaks = seq(min(df$x), quantile(df$x,0.99),
+           #                                 length.out = len_out)) +
+           # scale_y_continuous(breaks = seq(min(df$y), quantile(df$y,0.99), 
+           #                                 length.out = len_out)) +
+           coord_cartesian( xlim = c(min(df$x), quantile(df$x,0.99)),
+                            ylim = c(min(df$y), quantile(df$y,0.99))) +
+           xlab(xlabel) +
+           ylab(ylabel) 
+           # geom_line(stat = 'summary', fun.y = mean, aes(color = 'Mean')) +
+           # geom_line(stat = 'summary', fun.y = median, aes(color = 'Median'))+
+           # scale_color_manual(values = c('Mean' = 'red', 'Median' = 'blue')) +
+           # labs(color = 'Lines')
     } else 
-       p <-    ggplot(data = df, aes(x = df$x, y= df$y))+
-                # scale_x_continuous(breaks = seq(min(df$x), quantile(df$x,0.99),
-                #                                 length.out = len_out)) +
-                # scale_y_continuous(breaks = seq(min(df$y), quantile(df$y,0.99), 
-                #                                 length.out = len_out)) +
-                coord_cartesian( xlim = c(min(df$x), quantile(df$x,0.99)),
-                                ylim = c(min(df$y), quantile(df$y,0.99))) +
-                xlab(xlabel) +
-                ylab(ylabel)
+        p<-ggplot(data = df, aes(x = df$x, y= df$y))+
+          # scale_x_continuous(breaks = seq(min(df$x), quantile(df$x,0.99),
+          #                                 length.out = len_out)) +
+          # scale_y_continuous(breaks = seq(min(df$y), quantile(df$y,0.99), 
+          #                         length.out = len_out)) +
+          coord_cartesian( xlim = c(min(df$x), quantile(df$x,0.99)),
+                           ylim = c(min(df$y), quantile(df$y,0.99))) +
+          xlab(xlabel) +
+          ylab(ylabel)
   return(p)
 }
 ```
 
 
 ```{r alcohol_density_quality, echo=FALSE, message=FALSE, warning=FALSE}
+# a plot to explore Alcohol and density relation faceted by quality
 multi_fun(red,'alcohol','density','alcohol (% by volume)','density (g / cm^3)')+
   geom_point(alpha = 0.5, position = 'jitter') +
   facet_wrap(~quality) +
   geom_smooth()
 ```
 
+**I can see a the relation between the density and alcohol with quality, lower \
+density higher alcohol on avergae will result a better quality**
+
 ```{r echo=FALSE, echo=FALSE, message=FALSE, warning=FALSE}
-ggplot(data = red, aes(x = alcohol, y= volatile.acidity)) +
-  geom_point(color = '#F23545', alpha = 0.8) +
-  scale_x_continuous(breaks = seq(0,max(red$alcohol),.5))+
-  scale_y_continuous(breaks = seq(0,max(red$volatile.acidity),0.1)) +
-  coord_cartesian(xlim = c(min(red$alcohol),
-                           quantile(red$alcohol,0.99)),
-                  ylim = c(min(red$volatile.acidity),
-                           quantile(red$volatile.acidity,0.99))) +
-  facet_wrap(~quality) +
-  geom_smooth() +
-  geom_line(stat = 'summary', fun.y = median, color = 'red', linetype = 4) +
-  geom_line(stat = 'summary', fun.y = mean, color = 'yellow', linetype = 2)
+# I have noticed a strong +ve correlation between fixed acidity and citric acid
+# so here I am ploting these 2 against quality to see if they contribuite to it
+ggplot(data = red, aes(x = fixed.acidity, y = citric.acid)) +
+  geom_point(position = 'jitter', alpha = 0.2)+
+  facet_wrap(~quality, scales = 'free') +
+  xlab('fixed acidity (tartaric acid - g / dm^3)') +
+  ylab('citric acid (g / dm^3)') +
+  ggtitle('Fixed Acidity & Citric Acid faceted by Quality') +
+  geom_smooth(method=lm)
 ```
+
+**With the strong positive correlation beteweem fixed acidity and citric acid \
+i see the quality gets better on average of the increase of both features**
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# I have noticed a strong +ve correlation between fixed acidity and density
+# so here I am ploting these 2 against quality to see if they contribuite to it
+ggplot(data = red, aes(x = fixed.acidity, y = density)) +
+  geom_point(position = 'jitter', alpha = 0.2)+
+  facet_wrap(~quality, scales = 'free') +
+  xlab('fixed acidity (tartaric acid - g / dm^3)') +
+  ylab('density (g / cm^3)') +
+  ggtitle('Fixed Acidity & Density faceted by Quality') +
+  geom_smooth()
+```
+
+**Eventhough there is a strong correlation between fixed acidity and density \
+I see that there isn't much of relation between these 2 features and the \
+quality as on average these 2 features are the same on most of quality levels**
 
 
 ```{r mean_groupping}
-## grouping by quality and calculating the means for some features
+#grouping by quality and calculating the means for alcohol, 
+#density,residual.sugar, volatile.acidity, citric.acid
 quality_groupped <- group_by(red,quality)
 
 groupped_quality.means <- summarise(quality_groupped, 
@@ -608,48 +636,82 @@ groupped_quality.means <- summarise(quality_groupped,
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, quality_all.means}
+# using griupped_qiality.means to see the relationship between the main features
+# and quality
 ggplot(data = groupped_quality.means, aes(x = as.integer(as.vector(quality)))) +
-  geom_line(aes(y = mean_alcohol) ,colour = 'black') +
-  geom_line(aes(y = mean_residual.sugar), colour = 'red', linetype = 4) +
-  geom_line(aes(y = mean_density), colour = 'blue', linetype = 4) +
-  geom_line(aes(y = mean_volatile_acidity), colour = 'green', linetype = 4) +
-  geom_line(aes(y = mean_citric.acid), colour = 'darkblue', linetype = 4) +
-  scale_color_discrete(name = 'Means', 
-                       labels = c('Alcohol','sugar','density','volatile','citric'))+
-  xlab('Quality')
+  geom_line(aes(y = mean_alcohol ,colour = 'mean_alcohol')) +
+  geom_line(aes(y = mean_residual.sugar, colour = 'mean_residual.sugar'), 
+            linetype = 4) +
+  geom_line(aes(y = mean_density, colour = 'mean_density'), linetype = 4) +
+  geom_line(aes(y = mean_volatile_acidity, colour = 'mean_volatile_acidity'),
+            linetype = 4) +
+  geom_line(aes(y = mean_citric.acid, colour = 'mean_citric.acid'),
+            linetype = 4) +
+  scale_color_manual(values = c('mean_alcohol' = 'black', 
+                                'mean_residual.sugar' = 'blue',
+                                'mean_density' = 'red',
+                                'mean_volatile_acidity'= 'orange',
+                                'mean_citric.acid' = 'green')) +
+  labs(color = 'Means') +
+  xlab('Quality') +
+  ylab('Means') +
+  ggtitle('Means of alcohol, density, citric.acid residual.sugar and
+          volatile.acidity with quality')
 ```
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, free.sulfur.dioxide_alcohol_quality}
-ggplot(data = red, aes(x = alcohol, y = free.sulfur.dioxide)) +
-  facet_wrap(~quality) +
-  geom_smooth()
-```
+**This is a useful graph it showed me wha features affects the quality on \
+average as above increasing alcohol is a strong contirbutor, also increasing \
+citric acid plays a role into the quality while descreasing volatile acidity \
+on the other hand, residual sugar and density alone they don't have a direct \
+relation with quality**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, cutting_pH}
-## Testing with cutting a pH
-red$pH.bucket <- cut(red$pH, c(2.740,3.210,3.310,3.311,3.400))
+## Cutting pH variable to 4 buckets to see how pH and alcohol affects quality
+red$pH.bucket <- cut(red$pH, c(2.740,3.0,3.250,3.5,4.010))
 
-ggplot(data = subset(red, !is.na(pH.bucket)), 
-       aes(x = as.integer(as.vector(quality)), y = alcohol)) +
-  geom_smooth(aes(colour = pH.bucket))
+# plotting Quality vs alcohol and pH as coloring
+ggplot(data = red, aes(x = as.integer(as.vector(quality)), y = alcohol)) +
+  geom_smooth(aes(colour = pH.bucket),se=FALSE) +
+  xlab('quality (0-10)') +
+  ylab('alcohol (% by volume)') +
+  ggtitle('')
 ```
 
+**As per the above plot, I see that for pH values 3.25-3.5 and 3.5-4.01 \
+and higher percentage of alcohol contirbuites to higher levels of quality**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, cutting_tsd}
-## Testing with cutting a total.sulfur.dioxide
- red$tsd.bucket <- cut(red$total.sulfur.dioxide, c(1,10,20,30,40,50,60))
+## cutting a total.sulfur.dioxide to 8 slices and plot it against alcohol,
+##  desnity, total sulfur dioxide and quality
+ red$tsd.bucket <- cut(red$total.sulfur.dioxide, c(0,20,40,60,80,100,150,250,289))
 
-ggplot(data = subset(red, !is.na(tsd.bucket)), aes( x = alcohol, y = density)) +
-  geom_point(aes(color = tsd.bucket), alpha = 1/2, position = 'jitter') +
-  facet_wrap(~quality)
+ggplot(data =red, aes( x = alcohol, y = density, color = tsd.bucket)) +
+  geom_point(, alpha = 0.3, position = 'jitter') +
+  facet_wrap(~quality) +
+  xlab('alcohol (% by volume)') +
+  ylab('density (g / cm^3)') +
+  ggtitle('density & alcohol faceted by quality colored by total
+          sulfur dioxide')
 ```
 
+**following on my previous findings on total sulfur dioxide, in the above plot \
+I can see buckets (20,40] and (40,60] also the relatively lower density and \
+higher alcohol contributies to better quality**
+
 ```{r echo=FALSE, message=FALSE, warning=FALSE,alcohol_density_c_quality}
-ggplot(data = subset(red, !is.na(tsd.bucket)), aes( x = alcohol, y = density)) +
-  geom_point(aes(color = quality), alpha = 1/3, position = 'jitter') +
-  coord_cartesian(xlim = c(8.40, quantile(red$alcohol,0.99)),
-                  ylim = c(0.9901, quantile(red$density, 0.99))) +
-  scale_color_discrete(guide = guide_legend(reverse=TRUE))
+# convert quality to integer to have the gradient color
+red$quality <- as.integer(as.vector(red$quality))
+
+# ploting alcohol, density colored by quality
+multi_fun(red,'alcohol','density','alcohol (% by volume)','density (g / cm^3)')+
+  geom_point(aes(color = quality), alpha = 0.5, position = 'jitter') +
+  scale_color_discrete(guide = guide_legend(reverse=TRUE)) +
+  scale_color_gradient(low = 'blue', high= 'green')+ 
+  ggtitle('density & alcohol colored by quality')
+
+# revert back the quality to ordered factor
+red$quality <- as.ordered(red$quality)
+
 ```
 
 **Quality levels 6,7,8 sets on average between 11,13 of alcohol, and between \
@@ -657,51 +719,51 @@ ggplot(data = subset(red, !is.na(tsd.bucket)), aes( x = alcohol, y = density)) +
 wine**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, densit_alcohol_quality_rs.bucket}
-red$residual.sugar.bucket <- cut(red$residual.sugar,c(1,3,4,6,8,9))
 
-ggplot(data = subset(red, !is.na(residual.sugar.bucket)), 
-       aes( x = alcohol, y = density)) +
+# Cutting residual.sugar to 5 buckets and plot it againts quality, alcohol and 
+# density
+red$residual.sugar.bucket <- cut(red$residual.sugar,c(0.9,1.9,2.2,2.6,4,15.5))
+
+# convert quality to integer to have the gradient color
+red$quality <- as.integer(as.vector(red$quality))
+
+# plotting alcohol, density colored by quality facted by residual.sugar
+multi_fun(subset(red, !is.na(residual.sugar.bucket)),'alcohol','density',
+                 'alcohol (% by volume)','density (g / cm^3)') +
   geom_point(aes(color = quality) , alpha = 1, position = 'jitter') +
-  coord_cartesian(xlim = c(8.40, quantile(red$alcohol,0.99)),
-                  ylim = c(0.9901, quantile(red$density, 0.99))) +
   scale_color_discrete(guide = guide_legend(reverse=TRUE)) + 
-  facet_wrap(~residual.sugar.bucket)
+  facet_wrap(~residual.sugar.bucket) +
+  scale_color_gradient(low = 'blue', high= 'green') +
+  ggtitle('alcohol& density colored by quality facted by residual.sugar')
+
+# revert back the quality to ordered factor
+red$quality <- as.ordered(red$quality)
 ```
 
-**Resudual.sugar does have an influance on the quality, as in the plot, we see \
-points concentation in bucket (1,3] and (3,4], so in conclusion residual.sugar \
-is an contributing factor for the quality**
+**Resudual.sugar doesn't have an influance on the quality, as in the plot**
 
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, fsd_sulphates_quality}
-ggplot(data = red, aes(x = sulphates, y= free.sulfur.dioxide)) +
-  geom_point(aes(color = 'orange'), alpha = 1/5, position = 'jitter') +
-  scale_x_continuous(breaks = seq(0,max(red$sulphates),.1))+
-  scale_y_continuous(breaks = seq(0,max(red$free.sulfur.dioxide),2)) +
-  coord_cartesian(xlim = c(min(red$sulphates),
-                           quantile(red$sulphates,0.99)),
-                  ylim = c(min(red$free.sulfur.dioxide),
-                           quantile(red$free.sulfur.dioxide,0.99))) +
-  geom_smooth() +
-  facet_wrap(~quality)
+```{r echo=FALSE, message=FALSE, warning=FALSE, alcohol_sulphates_quality}
+# convert quality to integer to have the gradient color
+red$quality <- as.integer(as.vector(red$quality))
+
+# alcohol& sulphates colored by quality facted by total sulfur dioxide
+multi_fun(red, 'sulphates','alcohol','sulphates (potassium sulphate - g / dm3)'
+          ,'alcohol (% by volume)') +
+  geom_point(aes(color = quality), alpha = .6, position = 'jitter') +
+  facet_wrap(~tsd.bucket, scales = 'free') +
+  scale_color_gradient(low = 'blue', high= 'green') +
+  ggtitle('alcohol& sulphates colored by quality facted by total 
+          sulfur dioxide')
+
+# revert back the quality to ordered factor
+red$quality <- as.ordered(red$quality)
 ```
 
-**With sulphates value on average increases quality does increase**
-
-```{r echo=FALSE, message=FALSE, warning=FALSE, sulphates_alcohol_quality}
-ggplot(data = red, aes(x = sulphates, y= alcohol)) +
-  geom_point(aes(color = 'orange'), alpha = 1/5, position = 'jitter') +
-  scale_x_continuous(breaks = seq(0,max(red$sulphates),.1))+
-  scale_y_continuous(breaks = seq(0,max(red$alcohol),2)) +
-  coord_cartesian(xlim = c(min(red$sulphates),
-                           quantile(red$sulphates,0.99)),
-                  ylim = c(min(red$alcohol),
-                           quantile(red$alcohol,0.99))) +
-  geom_smooth() +
-  facet_wrap(~quality)
-```
-
-**Sulphates with alcohol does affect the quality as seen in the plot**
+**I can see in the plot alcohol with sulphates faceted total.sulfur.dioxide \
+colored by quality, in addition to total.sulfur.dioxide and alcohol positive \
+relation with quality increase of sulphates also contribuites to better \
+quality**
 
 # Multivariate Analysis
 
@@ -709,8 +771,10 @@ ggplot(data = red, aes(x = sulphates, y= alcohol)) +
 investigation. Were there features that strengthened each other in terms of \
 looking at your feature(s) of interest?
 
-**I have used alcohol, density and residual.sugar with quality, these features \
-does have a good infleunce of the quality**
+**Adding more features againt each other allowed to explore relation between \
+features of interest and againt the outcome variable, which allowed me to \
+conclude what feature has the most effect and what is the optimum value for \ 
+each**
 
 ### Interesting relation in the EDA.
 
@@ -719,6 +783,9 @@ good quality red wine**
 
 **Sulphates is an interesting feature I wasn't expecting to have an impact on \
 red wine quality**
+
+**while also some features are strongly correlated but it doesn't mean it will \
+have a direct affect on quality**
 ------
 
 # Final Plots and Summary
