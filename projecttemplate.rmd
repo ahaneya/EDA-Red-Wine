@@ -22,7 +22,7 @@ library(GGally)
 library(corrplot)
 ```
 
-```{r}
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 #Disabling all messages, wornings and echo
 knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
 ```
@@ -36,7 +36,7 @@ red <- read.csv('wineQualityReds.csv')
 red <- select(red, -X)
 ```
 
-**Public Data Set about Red Wine with 13 variable and 1599 observation**
+**Public Dataset about Red Wine with 12 variable and 1599 observation**
 
 # Univariate Plots Section
 
@@ -255,13 +255,13 @@ investigation into your feature(s) of interest?
 - density
 
 ### Did you create any new variables from existing variables in the dataset?
-No
+**No**
 
 ### Of the features you investigated, were there any unusual distributions? \
-Did you perform any operations on the data to tidy, adjust, or change the form \
+**Did you perform any operations on the data to tidy, adjust, or change the form \
 of the data? If so, why did you do this?
-No, data is tidy from, and data quality is good, I just a change on the data \
-type of quality to become ordered factor
+No, data is tidy from, and data quality is good, I just a changed data type \ 
+of quality to become ordered factor and removed X variable as its not needed**
 
 
 # Bivariate Plots Section
@@ -337,7 +337,7 @@ bi_fun <- function(dataset, x , y, xlabel, ylabel, alpha = 1) {
 ```
 
 
-```{r echo=FALSE, fig.height=max, fig.width=max, message=FALSE, warning=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 # Scatter plot of Residual.sugar & alcohol
 bi_fun(red, 'residual.sugar','alcohol', 'residual sugar (g / dm^3)',
        'alcohol (% by volume)', 0.5) +
@@ -406,7 +406,7 @@ bi_fun(red, 'quality','sulphates','quality (0-10)',
        'sulphates (potassium sulphate - g / dm3)', 0.3)
 ```
 
-**Sulphates & Quality: drawing the mean and median layers showed that the \ 
+**Sulphates & Quality: drawing the mean and median layers showed that the \
 increase of sulphates contributes to better quality.**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, density_quality}
@@ -422,7 +422,7 @@ clear when we look at the median and mean lines**
 bi_fun(red,'quality','alcohol','quality (0-10)', 'alcohol (% by volume)', 0.3)
 ```
 
-**Alcohol does affect the quality as per the plot, as I see a trend with the \ 
+**Alcohol does affect the quality as per the plot, as I see a trend with the \
 increase of the alcohol**
 
 
@@ -453,7 +453,7 @@ bi_fun(red,'sulphates','free.sulfur.dioxide',
 investigation. How did the feature(s) of interest vary with other features in \
 the dataset?
 
-**Alcohol $ residual.sugar: even by omitting the top 1% and zooming in, \ 
+**Alcohol $ residual.sugar: even by omitting the top 1% and zooming in, \
 I still see no relation between the alcohol and residual.sugar.**
  
 **Volatile.acidity & quality: I can see with the lower values of \
@@ -472,7 +472,7 @@ lower density can mean a better quality.**
 
 **Chlorides & Quality: I don't see a relation between these 2.**
 
-**Total.sulfur.dioxide & quality: generally a lower values of TSD can mean a \ 
+**Total.sulfur.dioxide & quality: generally a lower values of TSD can mean a \
 better quality this relation needs to be investigated further with more \
 variables**
  
@@ -676,7 +676,7 @@ ggplot(data = red, aes(x = as.integer(as.vector(quality)), y = alcohol)) +
   geom_smooth(aes(colour = pH.bucket),se=FALSE) +
   xlab('quality (0-10)') +
   ylab('alcohol (% by volume)') +
-  ggtitle('')
+  ggtitle('Alcohol & Quality smoother by pH.bucket')
 ```
 
 **As per the above plot, I see that for pH values 3.25-3.5 and 3.5-4.01 \
@@ -717,7 +717,7 @@ red$quality <- as.ordered(red$quality)
 ```
 
 **Quality levels 6,7,8 sets on average between 11,13 of alcohol, and between \
-0.996 and 0.993, so higher alcohol lower density does affect the quality of red \
+0.996 and 0.993, so higher alcohol lower density does affect the quality of red\
 wine**
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, densit_alcohol_quality_rs.bucket}
@@ -775,7 +775,7 @@ looking at your feature(s) of interest?
 
 **Adding more features againt each other allowed to explore relation between \
 features of interest and againt the outcome variable, which allowed me to \
-conclude what feature has the most effect and what is the optimum value for \ 
+conclude what feature has the most effect and what is the optimum value for \
 each**
 
 ### Interesting relation in the EDA.
@@ -878,7 +878,7 @@ analysis**
 
 **This EDA included a feature exploration of one feature at the begining \
 to see how can I use them then I used bivariate analysis and ploting to further\
-see the relation between most of the features in that analysis I noticed \ 
+see the relation between most of the features in that analysis I noticed \
 several feature that are correlated either positivly or negativly some of the \
 features: 
 - Alcohol and density.
@@ -905,7 +905,7 @@ and density are the main contributors to the red wine quality.**
 ######Limitiation:
 
 **One of the struggles that I had to deal with is the dataset limitation, \
-redwine quality set doesn't have a well distrubtied smaples most of the \ 
+redwine quality set doesn't have a well distrubtied smaples most of the \
 samples are of quality level 5 and 6, where there are no samples of level 1 \
 ,2, 9 and 10, and the samples on level 3, 4, 7 and 8 are very small in count \
 thus, having more well balanced dataset with more samples 
