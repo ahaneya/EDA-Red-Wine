@@ -497,7 +497,6 @@ graph**
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 # Correlation between all features using corrplot
 # converting quality to Integer to use it in corrplot package
-red <- select(red, -X)
 red$quality <- as.integer(as.vector(red$quality))
 co <- cor(red)
 corrplot(co, type = 'full',method = 'circle')
