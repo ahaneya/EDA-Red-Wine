@@ -31,6 +31,9 @@ knitr::opts_chunk$set(echo=FALSE, warning=FALSE, message=FALSE)
 ```{r echo=FALSE, Load_the_Data}
 # Load the Data
 red <- read.csv('wineQualityReds.csv')
+
+# removing X variable as its only an index
+red <- select(red, -X)
 ```
 
 **Public Data Set about Red Wine with 13 variable and 1599 observation**
@@ -491,7 +494,7 @@ graph**
 
 ### Correlation
 
-```{r}
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 # Correlation between all features using corrplot
 # converting quality to Integer to use it in corrplot package
 red <- select(red, -X)
@@ -792,83 +795,131 @@ have a direct affect on quality**
 
 ### Plot One
 
-```{r echo=FALSE, Plot_One}
-ggplot(data = subset(red, !is.na(residual.sugar.bucket)), aes( x = alcohol, y =
-                                                                 density)) +
-  geom_point(aes(color = quality) , alpha = 1, position = 'jitter') +
-  coord_cartesian(xlim = c(8.40, quantile(red$alcohol,0.99)),
-                  ylim = c(0.9901, quantile(red$density, 0.99))) +
-  scale_color_discrete(guide = guide_legend(reverse=TRUE)) + 
-  facet_wrap(~residual.sugar.bucket)
+```{r echo=FALSE, message=FALSE, warning=FALSE, Plot_One}
+# convert quality to integer to have the gradient color
+red$quality <- as.integer(as.vector(red$quality))
+
+# alcohol& sulphates colored by quality facted by total sulfur dioxide
+multi_fun(red, 'sulphates','alcohol','sulphates (potassium sulphate - g / dm3)'
+          ,'alcohol (% by volume)') +
+  geom_point(aes(color = quality), alpha = .6, position = 'jitter') +
+  facet_wrap(~tsd.bucket, scales = 'free') +
+  scale_color_gradient(low = 'blue', high= 'green') +
+  ggtitle('alcohol& sulphates colored by quality facted by total 
+          sulfur dioxide')
+
+# revert back the quality to ordered factor
+red$quality <- as.ordered(red$quality)
 ```
 
 
 ### Description One
 
-**This plot clearly show what contributies to better quality, as we see in the \
-first 2 buckets from top left we have almost no red and yellow points**
+**This plot shows 4 features relations and how do they contribute to the \
+quality here is and explaination of the plot: \
+I can see in the plot alcohol with sulphates faceted total.sulfur.dioxide \
+colored by quality, in addition to total.sulfur.dioxide and alcohol positive \
+relation with quality increase of sulphates also contribuites to better \
+quality**
 
 ### Plot Two
 
-```{r echo=FALSE, Plot_Two}
-ggplot(data = red, aes(y = alcohol, x= as.integer(as.vector(quality)))) +
-  geom_point(alpha = .06, position = 'jitter') +
-  scale_y_continuous(breaks = seq(0,quantile(red$alcohol,0.99),0.5))+
-  scale_x_continuous(breaks = seq(3,
-                              quantile(with(red,as.integer(as.vector(quality)))
-                                           ,0.99))) +
-  coord_cartesian(ylim = c(min(red$alcohol),
-                           quantile(red$alcohol,0.99)),
-                  xlim = c(3,
-                           quantile(with(red,as.integer(as.vector(quality)))
-                                    ,0.99))) +
-  xlab('Quality')+
-  geom_line(stat = 'summary', fun.y = median, color = 'red') +
-  geom_line(stat = 'summary', fun.y = mean, color = 'blue')
+```{r echo=FALSE, message=FALSE, warning=FALSE, Plot_Two}
+# using griupped_qiality.means to see the relationship between the main features
+# and quality
+ggplot(data = groupped_quality.means, aes(x = as.integer(as.vector(quality)))) +
+  geom_line(aes(y = mean_alcohol ,colour = 'mean_alcohol')) +
+  geom_line(aes(y = mean_residual.sugar, colour = 'mean_residual.sugar'), 
+            linetype = 4) +
+  geom_line(aes(y = mean_density, colour = 'mean_density'), linetype = 4) +
+  geom_line(aes(y = mean_volatile_acidity, colour = 'mean_volatile_acidity'),
+            linetype = 4) +
+  geom_line(aes(y = mean_citric.acid, colour = 'mean_citric.acid'),
+            linetype = 4) +
+  scale_color_manual(values = c('mean_alcohol' = 'black', 
+                                'mean_residual.sugar' = 'blue',
+                                'mean_density' = 'red',
+                                'mean_volatile_acidity'= 'orange',
+                                'mean_citric.acid' = 'green')) +
+  labs(color = 'Means') +
+  xlab('Quality') +
+  ylab('Means') +
+  ggtitle('Means of alcohol, density, citric.acid residual.sugar and
+          volatile.acidity with quality')
 ```
 
 ### Description Two
 
-**This plot show the strong relation between  alcohol and quality, adding the \
-median and mean lines shows this clearly**
+**This is an excellent plot that shows on average what contributes directly to \
+qualtiy which is in this case alcohol, volatile acidity, citric acid**
 
 ### Plot Three
 
-```{r echo=FALSE, Plot_Three}
-ggplot(data = red, aes(y = volatile.acidity, 
-                       x= as.integer(as.vector(quality)))) +
-  geom_point(alpha = .3, position = 'jitter') +
-  scale_y_continuous(breaks = seq(0,quantile(red$volatile.acidity,0.99),.1))+
-  scale_x_continuous(breaks = seq(3,quantile(with(red,
-                                      as.integer(as.vector(quality))),0.99))) +
-  coord_cartesian(ylim = c(min(red$volatile.acidity),
-                           quantile(red$volatile.acidity,0.99)),
-                  xlim = c(3,
-                           quantile(with(red,
-                                      as.integer(as.vector(quality))),0.99))) +
-  xlab('Quality') +
-  geom_line(stat = 'summary', fun.y = mean)
+```{r echo=FALSE, message=FALSE, warning=FALSE, Plot_Three}
+# Correlation between all features using corrplot
+# converting quality to Integer to use it in corrplot package
+red$quality <- as.integer(as.vector(red$quality))
+co <- cor(select(red, -c(pH.bucket,tsd.bucket,residual.sugar.bucket)))
+corrplot(co, type = 'full',method = 'circle')
+# revert back the quality to ordered factor
+red$quality <- as.ordered(red$quality)
 ```
 
 ### Description Three
 
-**This plot yet shows another relation between quality and volatile.acidity, \
-and its expressed evenmore with mean line of volatile.acidity**
+**This plot gives an idea on what to work on right away, its a starting point \
+especially for the multivarite analysis, this plot show the strong, weak and \
+modirate correlation between variables, as a second step in the analysis, \
+I would use 2 correlated features to add one or 2 more to enchance the \
+analysis**
 
 
 
 # Reflection
 
-**I guess not having enough samples of very high quality of red wine made this \
-analysis a bit tougher, the same can be said on the very low quality of red \
-wine, but in the end I found some interesting findings of some features like \
-sulphates, and I was successful in assiging some main features in the begining \
-of my analysis. In the end it was a good analysis, I will look into a bigger \
-dataset with data more distributed accross different level of qualites**
+**This EDA included a feature exploration of one feature at the begining \
+to see how can I use them then I used bivariate analysis and ploting to further\
+see the relation between most of the features in that analysis I noticed \ 
+several feature that are correlated either positivly or negativly some of the \
+features: 
+- Alcohol and density.
+- Quality and alcolol.
+- Sulphates and quality.
+- volatile acidity and quality.
 
+This bivariate analysis allowed me to foucs on these features as starting \
+point, and exploring a couple more with them.
+
+For the multivariate anlaysis I focused on Alcohol, quality and density as \
+main features then added the following features and even created some:
+- Sulphates
+- pH
+
+Newly cerated factors to help derive the relation:
+- Total sulfur dioxide bucket of 8 levels.
+- pH bucket of 4 levels.
+- residual sugar of 5 levels.
+
+as conclusion I found out that pH and Total sulfur dioxide, sulphates, alcohol \
+and density are the main contributors to the red wine quality.**
+
+######Limitiation:
+
+**One of the struggles that I had to deal with is the dataset limitation, \
+redwine quality set doesn't have a well distrubtied smaples most of the \ 
+samples are of quality level 5 and 6, where there are no samples of level 1 \
+,2, 9 and 10, and the samples on level 3, 4, 7 and 8 are very small in count \
+thus, having more well balanced dataset with more samples 
+
+lastly, with more data, and time to explore more relation or maybe making \
+more buckets can lead to more findings.
+Another thing I was thinking about is to analyse the whit wine dataset to see \
+if there are any similarites between these 2 dataset, that might lead to a new \
+findings.
 
 
 
 # Refereaances: 
 
 https://stackoverflow.com/questions/11330138/find-columns-with-all-missing-values
+https://stackoverflow.com/questions/5106782/use-of-ggplot-within-another-function-in-r
