@@ -880,7 +880,7 @@ analysis**
 to see how can I use them then I used bivariate analysis and ploting to further\
 see the relation between most of the features in that analysis I noticed \
 several feature that are correlated either positivly or negativly some of the \
-features: 
+features: \
 - Alcohol and density.
 - Quality and alcolol.
 - Sulphates and quality.
@@ -890,11 +890,11 @@ This bivariate analysis allowed me to foucs on these features as starting \
 point, and exploring a couple more with them.
 
 For the multivariate anlaysis I focused on Alcohol, quality and density as \
-main features then added the following features and even created some:
+main features then added the following features and even created some:\
 - Sulphates
 - pH
 
-Newly cerated factors to help derive the relation:
+Newly cerated factors to help derive the relation: \
 - Total sulfur dioxide bucket of 8 levels.
 - pH bucket of 4 levels.
 - residual sugar of 5 levels.
@@ -902,16 +902,16 @@ Newly cerated factors to help derive the relation:
 as conclusion I found out that pH and Total sulfur dioxide, sulphates, alcohol \
 and density are the main contributors to the red wine quality.**
 
-######Limitiation:
+#####Limitiation:
 
 **One of the struggles that I had to deal with is the dataset limitation, \
 redwine quality set doesn't have a well distrubtied smaples most of the \
 samples are of quality level 5 and 6, where there are no samples of level 1 \
 ,2, 9 and 10, and the samples on level 3, 4, 7 and 8 are very small in count \
-thus, having more well balanced dataset with more samples 
+thus, having more well balanced dataset with more samples.\
 
 lastly, with more data, and time to explore more relation or maybe making \
-more buckets can lead to more findings.
+more buckets can lead to more findings.\
 Another thing I was thinking about is to analyse the whit wine dataset to see \
 if there are any similarites between these 2 dataset, that might lead to a new \
 findings.
